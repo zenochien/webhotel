@@ -1,0 +1,9 @@
+C:\Users\asus\source\repos\WebHotel\ClassHotels\bin\Debug\netstandard2.1\ClassHotels.deps.json
+C:\Users\asus\source\repos\WebHotel\ClassHotels\bin\Debug\netstandard2.1\ClassHotels.dll
+C:\Users\asus\source\repos\WebHotel\ClassHotels\bin\Debug\netstandard2.1\ClassHotels.pdb
+C:\Users\asus\source\repos\WebHotel\ClassHotels\obj\Debug\netstandard2.1\ClassHotels.csprojAssemblyReference.cache
+C:\Users\asus\source\repos\WebHotel\ClassHotels\obj\Debug\netstandard2.1\ClassHotels.AssemblyInfoInputs.cache
+C:\Users\asus\source\repos\WebHotel\ClassHotels\obj\Debug\netstandard2.1\ClassHotels.AssemblyInfo.cs
+C:\Users\asus\source\repos\WebHotel\ClassHotels\obj\Debug\netstandard2.1\ClassHotels.csproj.CoreCompileInputs.cache
+C:\Users\asus\source\repos\WebHotel\ClassHotels\obj\Debug\netstandard2.1\ClassHotels.dll
+C:\Users\asus\source\repos\WebHotel\ClassHotels\obj\Debug\netstandard2.1\ClassHotels.pdb
