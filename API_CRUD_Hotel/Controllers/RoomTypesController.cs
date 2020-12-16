@@ -3,8 +3,6 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -32,37 +30,32 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult GetRoomTypes(RoomTypes roomTypes)
+        public async Task<IActionResult> GetRoomTypes(RoomTypes roomTypes)
         {
-            _roomTypes.AddRoomTypes(roomTypes);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + roomTypes.RoomTypeID, roomTypes);
+            var result = await _roomTypes.AddRoomTypesAsync(roomTypes);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.RoomTypeID, result);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{guestid}")]
-        public IActionResult DeleteRoomTypes(Guid roomtypeid)
+        public async Task<IActionResult> DeleteRoomTypes(Guid roomtypeid)
         {
             var roomTypes = _roomTypes.GetRoomTypes(roomtypeid);
             if (roomtypeid != null)
             {
-                _roomTypes.DeleteRoomTypes(roomTypes);
-                return Ok();
+                return Ok(await _roomTypes.DeleteRoomTypesAsync(roomTypes));
             }
             return NotFound($"Room Types with id: {roomTypes} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{roomtypeid}")]
-        public IActionResult EditRoomTypes(Guid roomTypesid, RoomTypes roomTypes)
-        {
-            var existingRoomTypes = _roomTypes.GetRoomTypes(roomTypesid);
-            if (existingRoomTypes != null)
-            {
-                roomTypes.RoomTypeID = existingRoomTypes.RoomTypeID;
-                _roomTypes.EditRoomTypes(roomTypes);
-            }
-            return Ok(roomTypes);
+        public async Task<IActionResult> EditRoomTypes(Guid roomTypesid, RoomTypes roomTypes)
+        {            
+                roomTypes.RoomTypeID = roomTypesid;
+                return Ok(await _roomTypes.UpdateRoomTypesAsync(roomTypes));            
         }
-
     }
 }
+    
+

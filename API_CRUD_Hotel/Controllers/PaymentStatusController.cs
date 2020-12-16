@@ -32,36 +32,31 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult GetPaymentStatus(PaymentStatus paymentStatus)
+        public async Task<IActionResult> GetPaymentStatus(PaymentStatus paymentStatus)
         {
-            _paymentStatus.AddPaymentStatus(paymentStatus);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + paymentStatus.PaymentStatusID, paymentStatus);
+           var resurt = await _paymentStatus.AddPaymentStatusAsync(paymentStatus);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + resurt.PaymentStatusID, resurt);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{paymentstatusid}")]
-        public IActionResult DeletePaymentStatus(Guid paymentstatusid)
+        public async Task<IActionResult> DeletePaymentStatus(Guid paymentstatusid)
         {
             var paymentStatus = _paymentStatus.GetPaymentStatus(paymentstatusid);
             if (paymentstatusid != null)
             {
-                _paymentStatus.DeletePaymentStatus(paymentStatus);
-                return Ok();
+                
+                return Ok(await _paymentStatus.DeletePaymentStatusAsync(paymentStatus));
             }
             return NotFound($"Payment Status with id: {paymentstatusid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{paymentstatusid}")]
-        public IActionResult EditGuests(Guid paymentstatusid, PaymentStatus paymentStatus)
+        public async Task<IActionResult> EditGuests(Guid paymentstatusid, PaymentStatus paymentStatus)
         {
-            var existingPS = _paymentStatus.GetPaymentStatus(paymentstatusid);
-            if (existingPS != null)
-            {
-                paymentStatus.PaymentStatusID = existingPS.PaymentStatusID;
-                _paymentStatus.EditPaymentStatus(paymentStatus);
-            }
-            return Ok(paymentStatus);
+            paymentStatus.PaymentStatusID = paymentstatusid;
+           return Ok(await _paymentStatus.UpdatePaymentStatusAsync(paymentStatus));
         }
     }
 }

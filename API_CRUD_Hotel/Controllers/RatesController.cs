@@ -3,8 +3,6 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -32,36 +30,32 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult GetRates(Rates rates)
+        public async Task<IActionResult> GetRates(Rates rates)
         {
-            _rates.AddRates(rates);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + rates.RateID, rates);
+            var result = await _rates.AddRatesAsync(rates);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.RateID, result);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{guestid}")]
-        public IActionResult DeleteRates(Guid rateid)
+        public async Task<IActionResult> DeleteRates(Guid rateid)
         {
             var rates = _rates.GetRates(rateid);
             if (rateid != null)
             {
-                _rates.DeleteRates(rates);
-                return Ok();
+
+                return Ok(await _rates.DeleteRatesAsync(rates));
             }
             return NotFound($"Rates with id: {rateid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{guestid}")]
-        public IActionResult EditGuests(Guid ratesid, Rates rates)
+        public async Task<IActionResult> EditGuests(Guid ratesid, Rates rates)
         {
-            var existingRates = _rates.GetRates(ratesid);
-            if (existingRates != null)
-            {
-                rates.RateID = existingRates.RateID;
-                _rates.EditRates(rates);
-            }
-            return Ok(ratesid);
+            rates.RateID = ratesid;
+            return Ok(await _rates.UpdateRatesAsync(rates));
+
         }
-    }  
+    }
 }

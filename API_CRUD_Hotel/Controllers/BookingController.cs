@@ -2,8 +2,6 @@
 using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -11,17 +9,18 @@ namespace API_CRUD_Hotel.Controllers
     [ApiController]
     public class BookingController : ControllerBase
     {
-        private readonly IBookings _bookings;
-        public BookingController(IBookings bookings)
+        private readonly IBookingRepository _repository;
+
+        public BookingController(IBookingRepository bookings)
         {
-            _bookings = bookings;
+            _repository = bookings;
         }
 
         [HttpGet]
         [Route("api/[controller]/{bookingid}")]
         public IActionResult GetBookings(Guid bookingid)
         {
-            var bookings = _bookings.GetBookings(bookingid);
+            var bookings = _repository.GetBooking(bookingid);
             if (bookings != null)
             {
                 return Ok(bookings);
@@ -31,36 +30,30 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult GetBookings(Bookings bookings)
+        public async Task<IActionResult> GetBookings(Booking bookings)
         {
-            _bookings.AddBookings(bookings);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + bookings.BookingID, bookings);
+            var result = await _repository.AddBookingAsync(bookings);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.BookingID, result);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{guestid}")]
-        public IActionResult DeleteBookings(Guid bookingid)
+        public async Task<IActionResult> DeleteBookings(Guid bookingid)
         {
-            var bookings = _bookings.GetBookings(bookingid);
+            var bookings = _repository.GetBooking(bookingid);
             if (bookingid != null)
             {
-                _bookings.DeleteBookings(bookings);
-                return Ok();
+                return Ok(await _repository.DeleteBookingAsync(bookings));
             }
             return NotFound($"Guests with id: {bookingid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{guestid}")]
-        public IActionResult EditGuests(Guid bookingid, Bookings bookings)
+        public async Task<IActionResult> EditGuests(Guid bookingid, Booking bookings)
         {
-            var exitingguests = _bookings.GetBookings(bookingid);
-            if (exitingguests != null)
-            {
-                bookings.BookingID = exitingguests.BookingID;
-                _bookings.EditBookings(bookings);
-            }
-            return Ok(bookings);
+            bookings.BookingID = bookingid;
+            return Ok(await _repository.UpdateBookingAsync(bookings));
         }
     }
 }

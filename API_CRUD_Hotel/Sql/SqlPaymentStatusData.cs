@@ -1,54 +1,51 @@
 ﻿using API_CRUD_Hotel.IServer;
+using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlPaymentStatusData:IPaymentStatus
+    public class SqlPaymentStatusData : BaseRepository<PaymentStatus>, IPaymentStatus
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlPaymentStatusData(HotelsDbContext hotelsDbContext)
+        public SqlPaymentStatusData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public PaymentStatus AddPaymentStatus(PaymentStatus PaymentStatus)
+        public async Task<PaymentStatus> AddPaymentStatusAsync(PaymentStatus PaymentStatus, CancellationToken cencellationToken = default)
         {
-            PaymentStatus.PaymentStatusID = Guid.NewGuid();
-            _hotelDbContext.paymentStatuses.Add(PaymentStatus);
-            _hotelDbContext.SaveChanges();
-            return PaymentStatus;
+            return await CreateAsync(PaymentStatus, cencellationToken);
         }
 
-        public void DeletePaymentStatus(PaymentStatus PaymentStatus)
+        public async Task<bool> DeletePaymentStatusAsync(PaymentStatus PaymentStatus, CancellationToken cencellationToken = default)
         {
-            _hotelDbContext.paymentStatuses.Remove(PaymentStatus);
-            _hotelDbContext.SaveChanges();
+            return await this.DeleteAsync(PaymentStatus);
         }
 
-        public PaymentStatus EditPaymentStatus(PaymentStatus PaymentStatus)
+        public IEnumerator<PaymentStatus> GetPaymentStatus()
         {
-            var existingPaymentStatus = _hotelDbContext.paymentStatuses.Find(PaymentStatus.PaymentStatusID);
-            if (existingPaymentStatus != null)
-            {
-                _hotelDbContext.paymentStatuses.Update(PaymentStatus);
-                _hotelDbContext.SaveChanges();
-            }
-            return PaymentStatus;
-        }
-
-        public List<PaymentStatus> GetPaymentStatus()
-        {
-            return _hotelDbContext.paymentStatuses.ToList();
+            return this.GetAll();
         }
 
         public PaymentStatus GetPaymentStatus(Guid PaymentStatusID)
         {
-            var paymentStatus = _hotelDbContext.paymentStatuses.Find(PaymentStatusID);
-            return paymentStatus;
+            return base.GetById(PaymentStatusID);
+        }
+
+        public async Task<PaymentStatus> UpdatePaymentStatusAsync(PaymentStatus PaymentStatus, CancellationToken cencellationToken = default)
+        {
+            var existingPaymentStatus = _hotelDbContext.paymentStatuses.FirstOrDefault(x => x.PaymentStatusID == PaymentStatus.PaymentStatusID);
+            if(PaymentStatus!=null)
+            {
+                _hotelDbContext.paymentStatuses.Update(existingPaymentStatus);
+                await _hotelDbContext.SaveChangesAsync(cencellationToken);
+            }
+            return existingPaymentStatus;
         }
     }
 }

@@ -32,10 +32,10 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult GetRateTypes(RateTypes rateTypes)
+        public async Task<IActionResult> GetRateTypes(RateTypes rateTypes)
         {
-            _rateTypes.AddRateTypes(rateTypes);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + rateTypes.RateTypeID, rateTypes);
+           var result = await _rateTypes.AddRateTypesAsync(rateTypes);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.RateTypeID, result);
         }
 
         [HttpDelete]
@@ -44,24 +44,20 @@ namespace API_CRUD_Hotel.Controllers
         {
             var rateTypes = _rateTypes.GetRateTypes(ratetypeid);
             if (ratetypeid != null)
-            {
-                _rateTypes.DeleteRateTypes(rateTypes);
-                return Ok();
+            {                
+                return Ok(_rateTypes.DeleteRateTypesAsync(rateTypes));
             }
             return NotFound($"Rate Types with id: {ratetypeid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{guestid}")]
-        public IActionResult EditRateTypes(Guid ratetypeid, RateTypes rateTypes)
+        public async Task<IActionResult> EditRateTypes(Guid ratetypeid, RateTypes rateTypes)
         {
-            var existingRateTypes = _rateTypes.GetRateTypes(ratetypeid);
-            if (existingRateTypes != null)
-            {
-                rateTypes.RateTypeID = existingRateTypes.RateTypeID;
-                _rateTypes.EditRateTypes(rateTypes);
-            }
-            return Ok(rateTypes);
+          
+                rateTypes.RateTypeID = ratetypeid;
+               return Ok(await _rateTypes.UpdateRateTypesAsync(rateTypes));
+           
         }
     }
 }

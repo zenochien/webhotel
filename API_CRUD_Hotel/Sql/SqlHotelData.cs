@@ -1,54 +1,51 @@
 ﻿using API_CRUD_Hotel.IServer;
+using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlHotelData : IHotels
+    public class SqlHotelData : BaseRepository<Hotels>, IHotels
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlHotelData(HotelsDbContext hotelsDbContext)
+        public SqlHotelData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public Hotels AddHotels(Hotels hotels)
+        public async Task<Hotels> AddHotels(Hotels hotels, CancellationToken cencellationToken = default)
         {
-            hotels.HotelID = Guid.NewGuid();
-            _hotelDbContext.hotels.Add(hotels);
-            _hotelDbContext.SaveChanges();
-            return hotels;
+            return await CreateAsync(hotels, cencellationToken);
         }
 
-        public void DeleteHotels(Hotels hotels)
+        public async Task<bool> DeleteHotelsAsync(Hotels hotels, CancellationToken cencellationToken = default)
         {
-            _hotelDbContext.hotels.Remove(hotels);
-            _hotelDbContext.SaveChanges();
+            return await this.DeleteAsync(hotels);
         }
 
-        public Hotels EditHotels(Hotels hotels)
+        public IEnumerator<Hotels> GetHotels()
         {
-            var existHotel = _hotelDbContext.hotels.Find(hotels.HotelID);
-            if (existHotel != null)
-            {
-                _hotelDbContext.hotels.Update(existHotel);
-                _hotelDbContext.SaveChanges();
-            }
-            return hotels;
-        }
-
-        public List<Hotels> GetHotels()
-        {
-            return _hotelDbContext.hotels.ToList();
+            return this.GetAll();
         }
 
         public Hotels GetHotels(Guid HotelID)
         {
-            var hotels = _hotelDbContext.hotels.Find(HotelID);
-            return hotels;
+            return base.GetById(HotelID);
+        }
+
+        public async Task<Hotels> UpdateHotelsAsync(Hotels hotels, CancellationToken cencellationToken = default)
+        {
+            var existingHotels = _hotelDbContext.hotels.FirstOrDefault(x => x.HotelID == hotels.HotelID);
+            if (existingHotels != null)
+            {
+                _hotelDbContext.hotels.Update(hotels);
+                await _hotelDbContext.SaveChangesAsync(cencellationToken);
+            }
+            return existingHotels;
         }
     }
 }

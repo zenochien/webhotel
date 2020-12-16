@@ -17,6 +17,6 @@ namespace DesignDatabaseHotel.Model
         [ForeignKey("RoomID")]
         public virtual Rooms Rooms { get; set; }
         [ForeignKey("StaffID")]
-        public virtual Staff Staff { get; set; }
+        public virtual Rates Staff { get; set; }
     }
 }
