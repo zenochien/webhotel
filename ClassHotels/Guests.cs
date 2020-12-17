@@ -32,6 +32,6 @@ namespace DesignDatabaseHotel.Model
         public string eMailAddress { get; set; }
         public string Gender { get; set; }
 
-        public virtual ICollection<Bookings> Bookings { get; set; } // cho~ nay nen dat ten la Bookings, vi no ko phai listId
+        public virtual ICollection<Booking> Bookings { get; set; } // cho~ nay nen dat ten la Bookings, vi no ko phai listId
     }
 }
