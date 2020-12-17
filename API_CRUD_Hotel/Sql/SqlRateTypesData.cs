@@ -1,51 +1,54 @@
 ﻿using API_CRUD_Hotel.IServer;
-using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlRateTypesData : BaseRepository<RateTypes>, IRateTypes
+    public class SqlRateTypesData : IRateTypes
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlRateTypesData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
+        public SqlRateTypesData(HotelsDbContext hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public async Task<RateTypes> AddRateTypesAsync(RateTypes RateTypes, CancellationToken cencellationToken = default)
+        public RateTypes AddRateTypes(RateTypes RateTypes)
         {
-            return await CreateAsync(RateTypes, cencellationToken);
+            RateTypes.RateTypeID = Guid.NewGuid();
+            _hotelDbContext.rateTypes.Add(RateTypes);
+            _hotelDbContext.SaveChanges();
+            return RateTypes;
         }
 
-        public async Task<bool> DeleteRateTypesAsync(RateTypes RateTypes, CancellationToken cencellationToken = default)
+        public void DeleteRateTypes(RateTypes RateTypes)
         {
-            return await this.DeleteAsync(RateTypes);
+            _hotelDbContext.rateTypes.Remove(RateTypes);
+            _hotelDbContext.SaveChanges();
         }
 
-        public IEnumerable<RateTypes> GetRateTypes()
+        public RateTypes EditRateTypes(RateTypes RateTypes)
         {
-            return this.GetAll();
+            var existingRateTypes = _hotelDbContext.rateTypes.Find(RateTypes.RateTypeID);
+            if (existingRateTypes != null)
+            {
+                _hotelDbContext.rateTypes.Update(RateTypes);
+                _hotelDbContext.SaveChanges();
+            }
+            return RateTypes;
+        }
+
+        public List<RateTypes> GetRateTypes()
+        {
+            return _hotelDbContext.rateTypes.ToList();
         }
 
         public RateTypes GetRateTypes(Guid RateTypesID)
         {
-            return this.GetById(RateTypesID);
-        }
-
-        public async Task<RateTypes> UpdateRateTypesAsync(RateTypes RateTypes, CancellationToken cencellationToken = default)
-        {
-            var existingReteTypes = _hotelDbContext.rateTypes.FirstOrDefault(x => x.RateTypeID == RateTypes.RateTypeID);
-            if (existingReteTypes != null)
-            {
-                _hotelDbContext.rateTypes.Update(existingReteTypes);
-                await _hotelDbContext.SaveChangesAsync(cencellationToken);
-            }
-            return existingReteTypes;
+            var rateTypes = _hotelDbContext.rateTypes.Find(RateTypesID);
+            return rateTypes;
         }
     }
 }

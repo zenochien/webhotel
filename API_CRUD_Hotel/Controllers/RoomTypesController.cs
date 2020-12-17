@@ -3,6 +3,8 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -30,32 +32,37 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetRoomTypes(RoomTypes roomTypes)
+        public IActionResult GetRoomTypes(RoomTypes roomTypes)
         {
-            var result = await _roomTypes.AddRoomTypesAsync(roomTypes);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.RoomTypeID, result);
+            _roomTypes.AddRoomTypes(roomTypes);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + roomTypes.RoomTypeID, roomTypes);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{guestid}")]
-        public async Task<IActionResult> DeleteRoomTypes(Guid roomtypeid)
+        public IActionResult DeleteRoomTypes(Guid roomtypeid)
         {
             var roomTypes = _roomTypes.GetRoomTypes(roomtypeid);
             if (roomtypeid != null)
             {
-                return Ok(await _roomTypes.DeleteRoomTypesAsync(roomTypes));
+                _roomTypes.DeleteRoomTypes(roomTypes);
+                return Ok();
             }
             return NotFound($"Room Types with id: {roomTypes} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{roomtypeid}")]
-        public async Task<IActionResult> EditRoomTypes(Guid roomTypesid, RoomTypes roomTypes)
-        {            
-                roomTypes.RoomTypeID = roomTypesid;
-                return Ok(await _roomTypes.UpdateRoomTypesAsync(roomTypes));            
+        public IActionResult EditRoomTypes(Guid roomTypesid, RoomTypes roomTypes)
+        {
+            var existingRoomTypes = _roomTypes.GetRoomTypes(roomTypesid);
+            if (existingRoomTypes != null)
+            {
+                roomTypes.RoomTypeID = existingRoomTypes.RoomTypeID;
+                _roomTypes.EditRoomTypes(roomTypes);
+            }
+            return Ok(roomTypes);
         }
+
     }
 }
-    
-

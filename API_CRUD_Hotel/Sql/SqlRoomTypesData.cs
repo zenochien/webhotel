@@ -1,57 +1,54 @@
 ﻿using API_CRUD_Hotel.IServer;
-using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    internal class SqlRoomTypesData : BaseRepository<RoomTypes>, IRoomTypes
+    public class SqlRoomTypesData : IRoomTypes
     {
         private HotelsDbContext _hotelDbContext;
-        public  SqlRoomTypesData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
+        public SqlRoomTypesData(HotelsDbContext hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public async  Task<RoomTypes> AddRoomTypesAsync(RoomTypes roomTypes, CancellationToken cancellationToken = default)
+        public RoomTypes AddRoomTypes(RoomTypes roomTypes)
         {
-            return await CreateAsync(roomTypes, cancellationToken);
+            roomTypes.RoomTypeID = Guid.NewGuid();
+            _hotelDbContext.roomTypes.Add(roomTypes);
+            _hotelDbContext.SaveChanges();
+            return roomTypes;
         }
 
-        public async Task<bool> DeleteRoomTypesAsync(RoomTypes roomTypes, CancellationToken cancellationToken = default)
+        public void DeleteRoomTypes(RoomTypes roomTypes)
         {
-            return await this.DeleteAsync(roomTypes);
+            _hotelDbContext.roomTypes.Remove(roomTypes);
+            _hotelDbContext.SaveChanges();
         }
 
-        public  IEnumerable<RoomTypes> GetRoomTypes()
+        public RoomTypes EditRoomTypes(RoomTypes roomTypes)
         {
-            return this.GetAll();
+            var existingRoomTypes = _hotelDbContext.roomTypes.Find(roomTypes.RoomTypeID);
+            if(existingRoomTypes!=null)
+            {
+                _hotelDbContext.roomTypes.Update(roomTypes);
+                _hotelDbContext.SaveChanges();
+            }
+            return roomTypes;
+        }
+
+        public List<RoomTypes> GetRoomTypes()
+        {
+            return _hotelDbContext.roomTypes.ToList();
         }
 
         public RoomTypes GetRoomTypes(Guid RoomTypesID)
         {
-            return base.GetById(RoomTypesID);
-        }
-
-        public async Task<RoomTypes> UpdateRoomTypesAsync(RoomTypes roomTypes, CancellationToken cancellationToken)
-        {
-            var existingRoomTypes = _hotelDbContext.roomTypes.FirstOrDefault(x => x.RoomTypeID == roomTypes.RoomTypeID);
-            if(existingRoomTypes!=null)
-            {
-                ToEntity(existingRoomTypes, roomTypes);
-                _hotelDbContext.roomTypes.Update(existingRoomTypes);
-                await _hotelDbContext.SaveChangesAsync(cancellationToken);
-            }
-            return existingRoomTypes;
-        }
-
-        internal void ToEntity(RoomTypes database, RoomTypes model)
-        {
-            database.RoomType = model.RoomType;
+            var roomTypes = _hotelDbContext.roomTypes.Find(RoomTypesID);
+            return roomTypes;
         }
     }
 }

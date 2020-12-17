@@ -13,6 +13,6 @@ namespace DesignDatabaseHotel.Model
         public string SortOrder { get; set; }
         public string Active { get; set; }
 
-        public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<Bookings> Bookings { get; set; }
     }
 }

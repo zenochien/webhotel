@@ -32,31 +32,36 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetBookingStatus(BookingStatus bookingStatus)
+        public IActionResult GetBookingStatus(BookingStatus bookingStatus)
         {
-            var result = await _bookingStatus.AddBookingAsync(bookingStatus);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.BookingStatusID, result);
+            _bookingStatus.AddBookingStatus(bookingStatus);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + bookingStatus.BookingStatusID, bookingStatus);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{bookingstatusid}")]
-        public async Task<IActionResult> DeleteBookingStatus(Guid bookingstatusid)
+        public IActionResult DeleteBookingStatus(Guid bookingstatusid)
         {
             var bookingstatus = _bookingStatus.GetBookingStatus(bookingstatusid);
             if (bookingstatusid != null)
             {
-                return Ok(await _bookingStatus.DeleteBookingStatusAsync(bookingstatus));
-               
+                _bookingStatus.DeleteBookingStatus(bookingstatus);
+                return Ok();
             }
             return NotFound($"Guests with id: {bookingstatusid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{bookingstatusid}")]
-        public async Task<IActionResult> EditBookingStatus(Guid bookingstatusid, BookingStatus bookingstatus)
+        public IActionResult EditBookingStatus(Guid bookingstatusid, BookingStatus bookingstatus)
         {
-            bookingstatus.BookingStatusID = bookingstatusid;
-               return Ok( await _bookingStatus.UpdateBookingStatusAsync(bookingstatus));
+            var existBS = _bookingStatus.GetBookingStatus(bookingstatusid);
+            if (existBS != null)
+            {
+                bookingstatus.BookingStatusID = existBS.BookingStatusID;
+                _bookingStatus.EditBookingStatus(bookingstatus);
+            }
+            return Ok(bookingstatus);
         }
     }
 }

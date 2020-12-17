@@ -32,31 +32,36 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetPaymentTypes(PaymentTypes paymentTypes)
+        public IActionResult GetPaymentTypes(PaymentTypes paymentTypes)
         {
-           var result = await _paymentTypes.AddPaymentTypesAsync(paymentTypes);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.PaymentTypeID, result);
+            _paymentTypes.AddPaymentTypes(paymentTypes);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + paymentTypes.PaymentTypeID, paymentTypes);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{paymenttypeid}")]
-        public async Task<IActionResult> DeletePaymentTypes(Guid paymenttypeid)
+        public IActionResult DeletePaymentTypes(Guid paymenttypeid)
         {
             var paymentTypes = _paymentTypes.GetPaymentTypes(paymenttypeid);
             if (paymenttypeid != null)
             {
-                
-                return Ok(_paymentTypes.DeletePaymentTypesAsync(paymentTypes));
+                _paymentTypes.DeletePaymentTypes(paymentTypes);
+                return Ok();
             }
             return NotFound($"Payment Types with id: {paymenttypeid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{guestid}")]
-        public async Task<IActionResult> EditPaymentTypes(Guid paymenttypeid, PaymentTypes paymentTypes)
+        public IActionResult EditPaymentTypes(Guid paymenttypeid, PaymentTypes paymentTypes)
         {
-                paymentTypes.PaymentTypeID = paymenttypeid;
-               return Ok(await _paymentTypes.UpdatePaymentTypesAsync(paymentTypes));
-         }
+            var existingPT = _paymentTypes.GetPaymentTypes(paymenttypeid);
+            if (existingPT != null)
+            {
+                paymentTypes.PaymentTypeID = existingPT.PaymentTypeID;
+                _paymentTypes.EditPaymentTypes(paymentTypes);
+            }
+            return Ok(paymentTypes);
+        }
     }
 }

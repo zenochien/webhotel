@@ -32,6 +32,6 @@ namespace DesignDatabaseHotel.Model
         public string ImagePath { get; set; }
 
         public virtual ICollection<Rooms> Rooms { get; set; }
-        public virtual ICollection<Booking> Bookings { get; set; }        
+        public virtual ICollection<Bookings> Bookings { get; set; }        
     }
 }

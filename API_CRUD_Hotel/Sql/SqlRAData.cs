@@ -1,51 +1,54 @@
 ﻿using API_CRUD_Hotel.IServer;
-using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlRAData : BaseRepository<ReservationAgents>, IReservationAgents
+    public class SqlRAData : IReservationAgents
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlRAData(HotelsDbContext hotelsDbContext) :  base(hotelsDbContext)
+        public SqlRAData(HotelsDbContext hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public async Task<ReservationAgents> AddReservationAgentsAsync(ReservationAgents reservationAgents, CancellationToken cencellationToken = default)
+        public ReservationAgents AddReservationAgents(ReservationAgents reservationAgents)
         {
-            return await CreateAsync(reservationAgents, cencellationToken);
+            reservationAgents.ReservationAgentID = Guid.NewGuid();
+            _hotelDbContext.reservationAgents.Add(reservationAgents);
+            _hotelDbContext.SaveChanges();
+            return reservationAgents;
         }
 
-        public async Task<bool> DeleteReservationAgentsAsync(ReservationAgents reservationAgents, CancellationToken cencellationToken = default)
+        public void DeleteReservationAgents(ReservationAgents reservationAgents)
         {
-            return await this.DeleteAsync(reservationAgents);
+            _hotelDbContext.reservationAgents.Remove(reservationAgents);
+            _hotelDbContext.SaveChanges();
         }
 
-        public IEnumerable<ReservationAgents> GetReservationAgents()
+        public ReservationAgents EditReservationAgents(ReservationAgents reservationAgents)
         {
-            return this.GetAll();
+            var existRA = _hotelDbContext.reservationAgents.Find(reservationAgents.ReservationAgentID);
+            if(existRA!=null)
+            {
+                _hotelDbContext.reservationAgents.Update(existRA);
+                _hotelDbContext.SaveChanges();
+            }
+            return reservationAgents;
+        }
+
+        public List<ReservationAgents> GetReservationAgents()
+        {
+            return _hotelDbContext.reservationAgents.ToList();
         }
 
         public ReservationAgents GetReservationAgents(Guid ReservationAgentID)
         {
-            return base.GetById(ReservationAgentID);
-        }
-
-        public async Task<ReservationAgents> UpdateReservationAgentsAsync(ReservationAgents reservationAgents, CancellationToken cencellationToken = default)
-        {
-            var existingRA = _hotelDbContext.reservationAgents.FirstOrDefault(x => x.ReservationAgentID == reservationAgents.ReservationAgentID);
-            if (existingRA != null)
-            {
-                _hotelDbContext.reservationAgents.Update(existingRA);
-                await _hotelDbContext.SaveChangesAsync(cencellationToken);
-            }
-            return existingRA;
+            var reservationAgents = _hotelDbContext.reservationAgents.Find(ReservationAgentID);
+            return reservationAgents;
         }
     }
 }

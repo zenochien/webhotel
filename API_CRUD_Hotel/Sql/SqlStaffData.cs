@@ -1,58 +1,54 @@
 ﻿using API_CRUD_Hotel.IServer;
-using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlStaffData : BaseRepository<Rates> ,IStaff
+    public class SqlStaffData : IStaff
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlStaffData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
+        public SqlStaffData(HotelsDbContext hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public async Task<Rates> AddStaffAsync(Rates staff, CancellationToken cancellationToken = default)
+        public Staff AddStaff(Staff Staff)
         {
-            return await CreateAsync(staff, cancellationToken);
+            Staff.StaffID = Guid.NewGuid();
+            _hotelDbContext.staffs.Add(Staff);
+            _hotelDbContext.SaveChanges();
+            return Staff;
         }
 
-        public async Task<bool> DeleteStaffAsync(Rates staff, CancellationToken cancellationToken = default)
+        public void DeleteStaff(Staff Staff)
         {
-            return await this.DeleteAsync(staff);
+            _hotelDbContext.staffs.Remove(Staff);
+            _hotelDbContext.SaveChanges();
         }
 
-        public IEnumerable<Rates> GetStaffs()
+        public Staff EditStaff(Staff Staff)
         {
-            return this.GetAll();
-        }
-
-        public Rates GetStaffs(Guid StaffID)
-        {
-            return base.GetById(StaffID);
-        }
-
-        public async Task<Rates> UpdateStaffAsync(Rates staff, CancellationToken cancellationToken = default)
-        {
-            var existingStaff = _hotelDbContext.staffs.FirstOrDefault(x => x.StaffID == staff.StaffID);
-            if (existingStaff != null)
+            var existingStaff = _hotelDbContext.staffs.Find(Staff.StaffID);
+            if(existingStaff != null)
             {
-                ToEntity(existingStaff, staff);
-                _hotelDbContext.staffs.Update(existingStaff);
-                await _hotelDbContext.SaveChangesAsync(cancellationToken);
+                _hotelDbContext.staffs.Update(Staff);
+                _hotelDbContext.SaveChanges();
             }
-            return existingStaff;
+            return Staff;
         }
 
-        internal void ToEntity(Rates database, Rates model)
+        public List<Staff> GetStaff()
         {
-            database.LastName = model.LastName;
-            database.FirstName = model.FirstName;
+            return _hotelDbContext.staffs.ToList();
+        }
+
+        public Staff GetStaff(Guid StaffID)
+        {
+            var staff = _hotelDbContext.staffs.Find(StaffID);
+            return staff;
         }
     }
 }

@@ -1,0 +1,5 @@
+D:\webhotel\API_CRUD_Hotel\obj\Debug\netcoreapp3.1\API_CRUD_Hotel.csprojAssemblyReference.cache
+D:\webhotel\API_CRUD_Hotel\obj\Debug\netcoreapp3.1\API_CRUD_Hotel.AssemblyInfoInputs.cache
+D:\webhotel\API_CRUD_Hotel\obj\Debug\netcoreapp3.1\API_CRUD_Hotel.AssemblyInfo.cs
+D:\webhotel\API_CRUD_Hotel\obj\Debug\netcoreapp3.1\API_CRUD_Hotel.csproj.CoreCompileInputs.cache
+D:\webhotel\API_CRUD_Hotel\obj\Debug\netcoreapp3.1\API_CRUD_Hotel.MvcApplicationPartsAssemblyInfo.cache

@@ -1,51 +1,54 @@
 ﻿using API_CRUD_Hotel.IServer;
-using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlPaymentData : BaseRepository<Payments>, IPayments
+    public class SqlPaymentData : IPayments
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlPaymentData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
+        public SqlPaymentData(HotelsDbContext hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public async Task<Payments> AddPayments(Payments payments, CancellationToken cencellationToken = default)
+        public Payments AddPayments(Payments payments)
         {
-            return await CreateAsync(payments, cencellationToken);
+            payments.PaymentID = Guid.NewGuid();
+            _hotelDbContext.payments.Add(payments);
+            _hotelDbContext.SaveChanges();
+            return payments;
         }
 
-        public async Task<bool> DeletePayments(Payments payments, CancellationToken cencellationToken = default)
+        public void DeletePayments(Payments payments)
         {
-            return await this.DeleteAsync(payments);
+            _hotelDbContext.payments.Remove(payments);
+            _hotelDbContext.SaveChanges();
         }
 
-        public IEnumerator<Payments> GetPayments()
+        public Payments EditPayments(Payments payments)
         {
-            return this.GetAll();
+            var existingPayments = _hotelDbContext.payments.Find(payments.PaymentID);
+            if(existingPayments!=null)
+            {
+                _hotelDbContext.payments.Update(payments);
+                _hotelDbContext.SaveChanges();
+            }
+            return payments;  
+        }
+
+        public List<Payments> GetPayments()
+        {
+            return _hotelDbContext.payments.ToList();
         }
 
         public Payments GetPayments(Guid PaymentID)
         {
-            return base.GetById(PaymentID);
-        }
-
-        public async Task<Payments> UpdatePaymentsAsync(Payments payments, CancellationToken cencellationToken = default)
-        {
-            var existingPayments = _hotelDbContext.payments.FirstOrDefault(x => x.PaymentID == payments.PaymentID);
-            if (existingPayments != null)
-            {
-                _hotelDbContext.payments.Update(payments);
-                await _hotelDbContext.SaveChangesAsync(cencellationToken);
-            }
-            return existingPayments;
+            var payments = _hotelDbContext.rooms.Find(PaymentID);
+            return payments;
         }
     }
 }
