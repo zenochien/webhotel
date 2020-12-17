@@ -1,51 +1,54 @@
 ﻿using API_CRUD_Hotel.IServer;
-using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlPositionsData : BaseRepository<Positions>, IPositions
+    public class SqlPositionsData : IPositions
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlPositionsData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
+        public SqlPositionsData(HotelsDbContext hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public async Task<Positions> AddPositionsAsync(Positions positions, CancellationToken cencellationToken = default)
+        public Positions AddPositions(Positions positions)
         {
-            return await CreateAsync(positions, cencellationToken);
+            positions.PositionID = Guid.NewGuid();
+            _hotelDbContext.positions.Add(positions);
+            _hotelDbContext.SaveChanges();
+            return positions;
         }
 
-        public async Task<bool> DeletePositionsAsync(Positions positions, CancellationToken cencellationToken = default)
+        public void DeletePositions(Positions positions)
         {
-            return await this.DeleteAsync(positions);
+            _hotelDbContext.positions.Remove(positions);
+            _hotelDbContext.SaveChanges();
         }
 
-        public IEnumerable<Positions> GetPositions()
+        public Positions EditPositions(Positions positions)
         {
-            return this.GetAll();
+            var existingPositions = _hotelDbContext.positions.Find(positions.PositionID);
+            if (existingPositions != null)
+            {
+                _hotelDbContext.positions.Update(positions);
+                _hotelDbContext.SaveChanges();
+            }
+            return positions;
+        }
+
+        public List<Positions> GetPositions()
+        {
+            return _hotelDbContext.positions.ToList();
         }
 
         public Positions GetPositions(Guid PositionID)
         {
-            return base.GetById(PositionID);
-        }
-
-        public async Task<Positions> UpdatePositions(Positions positions, CancellationToken cencellationToken = default)
-        {
-            var existingPosition = _hotelDbContext.positions.FirstOrDefault(x => x.PositionID == positions.PositionID);
-            if(existingPosition!=null)
-            {
-                _hotelDbContext.positions.Update(positions);
-                await _hotelDbContext.SaveChangesAsync(cencellationToken);
-            }
-            return existingPosition;
+            var positions = _hotelDbContext.positions.Find(PositionID);
+            return positions;
         }
     }
 }

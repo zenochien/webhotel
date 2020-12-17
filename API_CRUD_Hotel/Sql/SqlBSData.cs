@@ -1,51 +1,54 @@
 ﻿using API_CRUD_Hotel.IServer;
-using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlBSData : BaseRepository<BookingStatus>, IBookingStatus
+    public class SqlBSData : IBookingStatus
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlBSData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
+        public SqlBSData(HotelsDbContext hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public async Task<BookingStatus> AddBookingAsync(BookingStatus bookingStatus, CancellationToken cancellationToken = default)
+        public BookingStatus AddBookingStatus(BookingStatus bookingStatus)
         {
-            return await CreateAsync(bookingStatus, cancellationToken);
+            bookingStatus.BookingStatusID = Guid.NewGuid();
+            _hotelDbContext.bookingStatuses.Add(bookingStatus);
+            _hotelDbContext.SaveChanges();
+            return bookingStatus;
         }
 
-        public async Task<bool> DeleteBookingStatusAsync(BookingStatus bookingStatus, CancellationToken cancellationToken = default)
+        public void DeleteBookingStatus(BookingStatus bookingStatus)
         {
-            return await this.DeleteAsync(bookingStatus);
+            _hotelDbContext.bookingStatuses.Remove(bookingStatus);
+            _hotelDbContext.SaveChanges();
+        }
+
+        public BookingStatus EditBookingStatus(BookingStatus bookingStatus)
+        {
+            var existingBS = _hotelDbContext.bookingStatuses.Find(bookingStatus.BookingStatusID);
+            if (existingBS != null)
+            {
+                _hotelDbContext.bookingStatuses.Update(bookingStatus);
+                _hotelDbContext.SaveChanges();
+            }
+            return bookingStatus;
+        }
+
+        public List<BookingStatus> GetBookingStatus()
+        {
+            return _hotelDbContext.bookingStatuses.ToList();
         }
 
         public BookingStatus GetBookingStatus(Guid BookingStatusID)
         {
-            return base.GetById(BookingStatusID);
-        }
-
-        public IEnumerable<BookingStatus> GetBookingStatuses()
-        {
-            return this.GetAll();
-        }
-
-        public async Task<BookingStatus> UpdateBookingStatusAsync(BookingStatus bookingStatus, CancellationToken cancellationToken = default)
-        {
-            var existingBookingStatus = _hotelDbContext.bookingStatuses.FirstOrDefault(x => x.BookingStatusID == bookingStatus.BookingStatusID);
-            if (existingBookingStatus != null)
-            {
-                _hotelDbContext.bookingStatuses.Update(bookingStatus);
-                await _hotelDbContext.SaveChangesAsync(cancellationToken);
-            }
-            return existingBookingStatus;
+            var bookingStatus = _hotelDbContext.bookingStatuses.Find(BookingStatusID);
+            return bookingStatus;
         }
     }
 }

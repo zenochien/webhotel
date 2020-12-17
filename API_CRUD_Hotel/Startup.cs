@@ -3,10 +3,17 @@ using API_CRUD_Hotel.Sql;
 using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel
 {
@@ -23,6 +30,7 @@ namespace API_CRUD_Hotel
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IBookings, SqlBookingsData>();
             services.AddScoped<IBookingStatus, SqlBSData>();
             services.AddScoped<IHotels, SqlHotelData>();
             services.AddScoped<IPayments, SqlPaymentData>();
@@ -39,7 +47,7 @@ namespace API_CRUD_Hotel
             services.AddScoped<IStaffRooms, SqlStaffRooms>();
             services.AddScoped<IPositions, SqlPositionsData>();
             services.AddScoped<IGuests, SqlGuestData>();
-            services.AddScoped<IBookingRepository, SqlBookingsRepository>();
+            services.AddScoped<IBookings, SqlBookingsData>();
             services.AddScoped<IReservationAgents, SqlRAData>();
 
             services.AddDbContextPool<HotelsDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ketnoisql")));
@@ -50,7 +58,8 @@ namespace API_CRUD_Hotel
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();                
+
             }
 
             app.UseHttpsRedirection();

@@ -1,18 +1,17 @@
-﻿using API_CRUD_Hotel.Repositories;
-using DesignDatabaseHotel.Model;
+﻿using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IReservationAgents : Repositories.IRepository<ReservationAgents>
+    public interface IReservationAgents
     {
-        IEnumerable<ReservationAgents> GetReservationAgents();
+        List<ReservationAgents> GetReservationAgents();
         ReservationAgents GetReservationAgents(Guid ReservationAgentID);
-        Task<ReservationAgents> AddReservationAgentsAsync(ReservationAgents reservationAgents, CancellationToken cencellationToken = default);
-        Task<bool> DeleteReservationAgentsAsync(ReservationAgents reservationAgents, CancellationToken cencellationToken = default);
-        Task<ReservationAgents> UpdateReservationAgentsAsync(ReservationAgents reservationAgents, CancellationToken cencellationToken = default);
+        ReservationAgents AddReservationAgents(ReservationAgents reservationAgents);
+        void DeleteReservationAgents(ReservationAgents reservationAgents);
+        ReservationAgents EditReservationAgents(ReservationAgents reservationAgents);
     }
 }

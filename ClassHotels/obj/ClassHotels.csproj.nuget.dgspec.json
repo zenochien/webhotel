@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\webhotel\\ClassHotels\\ClassHotels.csproj": {}
+    "C:\\Users\\asus\\source\\repos\\WebHotel\\ClassHotels\\ClassHotels.csproj": {}
   },
   "projects": {
-    "D:\\webhotel\\ClassHotels\\ClassHotels.csproj": {
+    "C:\\Users\\asus\\source\\repos\\WebHotel\\ClassHotels\\ClassHotels.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\webhotel\\ClassHotels\\ClassHotels.csproj",
+        "projectUniqueName": "C:\\Users\\asus\\source\\repos\\WebHotel\\ClassHotels\\ClassHotels.csproj",
         "projectName": "ClassHotels",
-        "projectPath": "D:\\webhotel\\ClassHotels\\ClassHotels.csproj",
+        "projectPath": "C:\\Users\\asus\\source\\repos\\WebHotel\\ClassHotels\\ClassHotels.csproj",
         "packagesPath": "C:\\Users\\asus\\.nuget\\packages\\",
-        "outputPath": "D:\\webhotel\\ClassHotels\\obj\\",
+        "outputPath": "C:\\Users\\asus\\source\\repos\\WebHotel\\ClassHotels\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -3,6 +3,8 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -31,32 +33,36 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetPayments(Payments payments)
+        public IActionResult GetPayments(Payments payments)
         {
-            var result = await _payments.AddPayments(payments);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.PaymentID, result);
+            _payments.AddPayments(payments);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + payments.PaymentID, payments);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{paymentid}")]
-        public async Task<IActionResult> DeletePayments(Guid paymentid)
+        public IActionResult DeletePayments(Guid paymentid)
         {
             var payments = _payments.GetPayments(paymentid);
             if (paymentid != null)
             {
-
-                return Ok(await _payments.DeletePayments(payments));
+                _payments.DeletePayments(payments);
+                return Ok();
             }
             return NotFound($"Payments with id: {paymentid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{paymentid}")]
-        public async Task<IActionResult> EditPayments(Guid paymentid, Payments payments)
+        public IActionResult EditPayments(Guid paymentid, Payments payments)
         {
-            payments.PaymentID = paymentid;
-            return Ok(await _payments.UpdatePaymentsAsync(payments));
-
+            var existingPayment = _payments.GetPayments(paymentid);
+            if (existingPayment != null)
+            {
+                payments.PaymentID = existingPayment.PaymentID;
+                _payments.EditPayments(payments);
+            }
+            return Ok(payments);
         }
     }
 }

@@ -3,6 +3,8 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -30,31 +32,37 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetStaffRooms(StaffRooms staffRooms)
+        public IActionResult GetStaffRooms(StaffRooms staffRooms)
         {
-            var result = await _staffRooms.AddStaffRoomsAsync(staffRooms);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.StaffRoomID, result);
+            _staffRooms.AddStaffRooms(staffRooms);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + staffRooms.StaffRoomID, staffRooms);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{staffroomid}")]
-        public async Task<IActionResult> DeleteStaffRooms(Guid staffroomid)
+        public IActionResult DeleteStaffRooms(Guid staffroomid)
         {
             var staffrooms = _staffRooms.GetStaffRooms(staffroomid);
             if (staffroomid != null)
             {
-
-                return Ok(await _staffRooms.DeleteStaffRoomsAsync(staffrooms));
+                _staffRooms.DeleteStaffRooms(staffrooms);
+                return Ok();
             }
             return NotFound($"Staff Rooms with id: {staffroomid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{guestid}")]
-        public async Task<IActionResult> EditGuests(Guid staffroomid, StaffRooms staffRooms)
+        public IActionResult EditGuests(Guid staffroomid, StaffRooms staffRooms)
         {
-            staffRooms.StaffRoomID = staffroomid;
-            return Ok(await _staffRooms.UpdateStaffRoomsAsync(staffRooms));
+            var existingStaffRooms = _staffRooms.GetStaffRooms(staffroomid);
+            if (existingStaffRooms != null)
+            {
+                staffRooms.StaffRoomID = existingStaffRooms.StaffRoomID;
+                _staffRooms.EditStaffRooms(staffRooms);
+            }
+            return Ok(staffRooms);
         }
+
     }
 }

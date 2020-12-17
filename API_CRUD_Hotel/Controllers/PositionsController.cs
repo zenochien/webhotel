@@ -3,6 +3,8 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -30,33 +32,36 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetBookings(Positions positions)
+        public IActionResult GetBookings(Positions positions)
         {
-            var resul = await _positions.AddPositionsAsync(positions);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + resul.PositionID, resul);
+            _positions.AddPositions(positions);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + positions.PositionID, positions);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{positionid}")]
-        public async Task<IActionResult> DeletePosition(Guid positionid)
+        public IActionResult DeletePosition(Guid positionid)
         {
             var positions = _positions.GetPositions(positionid);
             if (positionid != null)
             {
-
-                return Ok(await _positions.DeletePositionsAsync(positions));
+                _positions.DeletePositions(positions);
+                return Ok();
             }
             return NotFound($"Positions with id: {positionid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{positionid}")]
-        public async Task<IActionResult> EditGuests(Guid positionid, Positions positions)
+        public IActionResult EditGuests(Guid positionid, Positions positions)
         {
-
-            positions.PositionID = positionid;
-            return Ok(await _positions.UpdatePositions(positions));
-
+            var existingPosition = _positions.GetPositions(positionid);
+            if (existingPosition != null)
+            {
+                positions.PositionID = existingPosition.PositionID;
+                _positions.EditPositions(positions);
+            }
+            return Ok(positions);
         }
     }
 }

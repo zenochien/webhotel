@@ -45,7 +45,7 @@ namespace API_CRUD_Hotel.Controllers
             var hotels = _hotels.GetHotels(hotelid);
             if (hotelid != null)
             {
-                _hotels.DeleteHotelsAsync(hotels);
+                _hotels.DeleteHotels(hotels);
                 return Ok();
             }
             return NotFound($"Hotels with id: {hotelid} was not found");
@@ -59,7 +59,7 @@ namespace API_CRUD_Hotel.Controllers
             if (existingHotels != null)
             {
                 hotels.HotelID = existingHotels.HotelID;
-                _hotels.UpdateHotelsAsync(hotels);
+                _hotels.EditHotels(hotels);
             }
             return Ok(hotels);
         }

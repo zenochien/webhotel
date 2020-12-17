@@ -3,6 +3,8 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -30,33 +32,36 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetGuests(Guests guests)
+        public IActionResult GetGuests(Guests guests)
         {
-            var result = await _guests.AddGuestsAsync(guests);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.GuestID, result);
+            _guests.AddGuests(guests);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + guests.GuestID, guests);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{guestid}")]
-        public async Task<IActionResult> DeleteGuests(Guid guestid)
+        public IActionResult DeleteGuests(Guid guestid)
         {
             var guests = _guests.GetGuests(guestid);
-            if (guestid != null)
+            if (guestid!=null)
             {
-
-                return Ok(await _guests.DeleteGuestsAsync(guests));
+                _guests.DeleteGuests(guests);
+                return Ok();
             }
             return NotFound($"Guests with id: {guestid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{guestid}")]
-        public async Task<IActionResult> EditGuests(Guid GuestID, Guests guests)
+        public IActionResult EditGuests(Guid GuestID, Guests guests)
         {
-
-            guests.GuestID = GuestID;
-            return Ok(await _guests.UpdateGuests(guests));
-
+            var  exitingguests = _guests.GetGuests(GuestID);
+            if (exitingguests != null)
+            {
+                guests.GuestID = exitingguests.GuestID;
+                _guests.EditGuests(guests);
+            }
+            return Ok(guests);
         }
     }
 }

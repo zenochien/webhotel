@@ -3,6 +3,8 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
@@ -19,7 +21,7 @@ namespace API_CRUD_Hotel.Controllers
         [Route("api/[controller]/{staffid}")]
         public IActionResult GetStaff(Guid staffid)
         {
-            var staff = _staff.GetStaffs(staffid);
+            var staff = _staff.GetStaff(staffid);
             if (staff != null)
             {
                 return Ok(staff);
@@ -29,30 +31,36 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetStaff(Rates staff)
+        public IActionResult GetStaff(Staff staff)
         {
-            var result = await _staff.AddStaffAsync(staff);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.StaffID, result);
+            _staff.AddStaff(staff);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + staff.StaffID, staff);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{staffid}")]
-        public async Task<IActionResult> DeleteStaff(Guid staffid)
+        public IActionResult DeleteStaff(Guid staffid)
         {
-            var staff = _staff.GetStaffs(staffid);
+            var staff = _staff.GetStaff(staffid);
             if (staffid != null)
             {
-                return Ok(await _staff.DeleteStaffAsync(staff));
+                _staff.DeleteStaff(staff);
+                return Ok();
             }
             return NotFound($"Staff with id: {staffid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{guestid}")]
-        public async Task<IActionResult> EditGuests(Guid staffid, Rates staff)
+        public IActionResult EditGuests(Guid staffid, Staff staff)
         {
-            staff.StaffID = staffid;
-            return Ok(await _staff.UpdateStaffAsync(staff));
+            var existingStaff = _staff.GetStaff(staffid);
+            if (existingStaff != null)
+            {
+                staff.StaffID = existingStaff.StaffID;
+                _staff.EditStaff(staff);
+            }
+            return Ok(staff);
         }
     }
 }

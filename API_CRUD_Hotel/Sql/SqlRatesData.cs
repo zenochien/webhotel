@@ -1,51 +1,53 @@
 ﻿using API_CRUD_Hotel.IServer;
-using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlRatesData : BaseRepository<Rates>, IRates
+    public class SqlRatesData : IRates
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlRatesData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
+        public SqlRatesData(HotelsDbContext hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public async Task<Rates> AddRatesAsync(Rates rates, CancellationToken cencellationToken = default)
+        public Rates AddRates(Rates rates)
         {
-            return await CreateAsync(rates, cencellationToken);
+            rates.RateID = Guid.NewGuid();
+            _hotelDbContext.rates.Add(rates);
+            _hotelDbContext.SaveChanges();
+            return rates;
         }
 
-        public async Task<bool> DeleteRatesAsync(Rates rates, CancellationToken cencellationToken = default)
+        public void DeleteRates(Rates rates)
         {
-            return await this.DeleteAsync(rates);
+            _hotelDbContext.rates.Remove(rates);
+            _hotelDbContext.SaveChanges();
         }
 
-        public IEnumerable<Rates> GetRates()
+        public Rates EditRates(Rates rates)
         {
-            return this.GetAll();
+            var existingRates = _hotelDbContext.rates.Find(rates.RateID);
+            if (existingRates != null)
+            {
+                _hotelDbContext.rates.Update(rates);
+                _hotelDbContext.SaveChanges();
+            }
+            return rates;
+        }
+
+        public List<Rates> GetRates()
+        {
+            return _hotelDbContext.rates.ToList();
         }
 
         public Rates GetRates(Guid RateID)
         {
-            return this.GetById(RateID);
-        }
-
-        public async Task<Rates> UpdateRatesAsync(Rates rates, CancellationToken cencellationToken = default)
-        {
-            var existingRate = _hotelDbContext.rates.FirstOrDefault(x => x.RateID == rates.RateID);
-            if (existingRate != null)
-            {
-                _hotelDbContext.rates.Update(existingRate);
-                await _hotelDbContext.SaveChangesAsync(cencellationToken);
-            }
-            return existingRate;
+            var rates = _hotelDbContext.rates.Find(RateID);
+            return rates;
         }
     }
 }

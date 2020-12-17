@@ -3,11 +3,13 @@ using DesignDatabaseHotel.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Controllers
 {
-
+    
     [ApiController]
     public class RoomsBookedController : ControllerBase
     {
@@ -22,7 +24,7 @@ namespace API_CRUD_Hotel.Controllers
         public IActionResult GetRoomsBooked(Guid roomsbookedid)
         {
             var roombookedid = _RoomsBooked.GetRoomsBooked(roomsbookedid);
-            if (roomsbookedid != null)
+            if(roomsbookedid!=null)
             {
                 return Ok(roombookedid);
             }
@@ -30,31 +32,36 @@ namespace API_CRUD_Hotel.Controllers
         }
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetRoomsBooked(RoomsBooked roomBooked)
+        public IActionResult GetRoomsBooked(RoomsBooked roomBooked)
         {
-            var result = await _RoomsBooked.AddRoomsBookedAsync(roomBooked);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.RoomBookedID, result);
+            _RoomsBooked.AddRoomsBooked(roomBooked);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + roomBooked.RoomBookedID, roomBooked);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{roombookedid}")]
-        public async Task<IActionResult> DeleteBookings(Guid roombookedid)
+        public IActionResult DeleteBookings(Guid roombookedid)
         {
             var bookings = _RoomsBooked.GetRoomsBooked(roombookedid);
             if (roombookedid != null)
             {
-                return Ok(await _RoomsBooked.DeleteRoomBookedsAsync(bookings));
+                _RoomsBooked.DeleteRB(bookings);
+                return Ok();
             }
             return NotFound($"Guests with id: {roombookedid} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{roombookedid}")]
-        public async Task<IActionResult> EditRB(Guid roombookedid, RoomsBooked roomsBooked)
+        public IActionResult EditRB(Guid roombookedid, RoomsBooked roomsBooked)
         {
-            roomsBooked.BookingID = roombookedid;
-            return Ok(await _RoomsBooked.UpdateRoomBookeds(roomsBooked));
-
+            var existRB = _RoomsBooked.GetRoomsBooked(roombookedid);
+            if (existRB != null)
+            {
+                roomsBooked.BookingID = existRB.RoomBookedID;
+                _RoomsBooked.EditRB(roomsBooked);
+            }
+            return Ok(roomsBooked);
         }
     }
 }

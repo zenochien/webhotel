@@ -14,6 +14,6 @@ namespace DesignDatabaseHotel.Model
         public string SortOrder { get; set; }
         public string Active { get; set; }
 
-        public virtual ICollection<Rates> Staffs { get; set; }
+        public virtual ICollection<Staff> Staffs { get; set; }
     }
 }

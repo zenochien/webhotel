@@ -1,18 +1,17 @@
-﻿using API_CRUD_Hotel.Repositories;
-using DesignDatabaseHotel.Model;
+﻿using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IRoomStatus : Repositories.IRepository<RoomStatus>
+    public interface IRoomStatus
     {
-        IEnumerable<RoomStatus> GetRoomStatus();
+        List<RoomStatus> GetRoomStatus();
         RoomStatus GetRoomStatus(Guid RoomStatusID);
-        Task<RoomStatus> AddRoomStatusAsync(RoomStatus roomStatus, CancellationToken cancellationToken = default);
-        Task<bool> DeleteRoomStatusAsync(RoomStatus roomStatus, CancellationToken cancellationToken = default);
-        Task<RoomStatus> UpdateRoomStatusAsync(RoomStatus roomStatus, CancellationToken cancellationToken = default);
+        RoomStatus AddRoomStatus(RoomStatus roomStatus);
+        void DeleteRoomStatus(RoomStatus roomStatus);
+        RoomStatus EditRoomStatus(RoomStatus roomStatus);
     }
 }
