@@ -27,7 +27,7 @@ namespace API_CRUD_Hotel.Sql
             return await this.DeleteAsync(hotels);
         }
 
-        public IEnumerator<Hotels> GetHotels()
+        public IEnumerable<Hotels> GetHotels()
         {
             return this.GetAll();
         }

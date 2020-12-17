@@ -10,7 +10,7 @@ namespace API_CRUD_Hotel.IServer
 {
     public interface IHotels:IRepository<Hotels>
     {
-        IEnumerator<Hotels> GetHotels();
+        IEnumerable<Hotels> GetHotels();
         Hotels GetHotels(Guid HotelID);
         Task<Hotels> AddHotels(Hotels hotels, CancellationToken cencellationToken = default);
         Task<bool> DeleteHotelsAsync(Hotels hotels, CancellationToken cencellationToken = default);

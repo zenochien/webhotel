@@ -27,7 +27,7 @@ namespace API_CRUD_Hotel.Sql
             return await this.DeleteAsync(PaymentStatus);
         }
 
-        public IEnumerator<PaymentStatus> GetPaymentStatus()
+        public IEnumerable<PaymentStatus> GetPaymentStatus()
         {
             return this.GetAll();
         }

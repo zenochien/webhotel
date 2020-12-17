@@ -9,7 +9,7 @@ namespace API_CRUD_Hotel.IServer
 {
     public interface IPayments : IRepository<Payments>
     {
-        IEnumerator<Payments> GetPayments();
+        IEnumerable<Payments> GetPayments();
         Payments GetPayments(Guid PaymentID);
         Task<Payments> AddPayments(Payments payments, CancellationToken cencellationToken = default);
         Task<bool> DeletePayments(Payments payments, CancellationToken cencellationToken = default);
