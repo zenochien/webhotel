@@ -32,36 +32,31 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult GetRoomStatus(RoomStatus roomStatus)
+        public async Task<IActionResult> GetRoomStatus(RoomStatus roomStatus)
         {
-            _roomStatus.AddRoomStatus(roomStatus);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + roomStatus.RoomStatusID, roomStatus);
+           var result = await _roomStatus.AddRoomStatusAsync(roomStatus);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.RoomStatusID, result);
         }
 
         [HttpDelete]
         [Route("api/[controller]/{roomstatusid}")]
-        public IActionResult DeleteRoomTypes(Guid roomtypeid)
+        public async Task<IActionResult> DeleteRoomTypes(Guid roomtypeid)
         {
             var roomStatus = _roomStatus.GetRoomStatus(roomtypeid);
             if (roomtypeid != null)
-            {
-                _roomStatus.DeleteRoomStatus(roomStatus);
-                return Ok();
+            {               
+                return Ok(await _roomStatus.DeleteRoomStatusAsync(roomStatus));
             }
             return NotFound($"Room Status with id: {roomStatus} was not found");
         }
 
         [HttpPatch]
         [Route("api/[controller]/{roomstatusid}")]
-        public IActionResult EditRoomStatus(Guid roomstatusid, RoomStatus roomStatus)
+        public async Task<IActionResult> EditRoomStatus(Guid roomstatusid, RoomStatus roomStatus)
         {
-            var existingRoomStatus = _roomStatus.GetRoomStatus(roomstatusid);
-            if (existingRoomStatus != null)
-            {
-                roomStatus.RoomStatusID = existingRoomStatus.RoomStatusID;
-                _roomStatus.EditRoomStatus(roomStatus);
-            }
-            return Ok(roomStatus);
+
+            roomStatus.RoomStatusID = roomstatusid;
+            return Ok(await _roomStatus.UpdateRoomStatusAsync(roomStatus));
         }
     }
 }

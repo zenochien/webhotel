@@ -1,53 +1,51 @@
 ﻿using API_CRUD_Hotel.IServer;
+using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlRatesData : IRates
+    public class SqlRatesData : BaseRepository<Rates>, IRates
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlRatesData(HotelsDbContext hotelsDbContext)
+        public SqlRatesData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public Rates AddRates(Rates rates)
+        public async Task<Rates> AddRatesAsync(Rates rates, CancellationToken cencellationToken = default)
         {
-            rates.RateID = Guid.NewGuid();
-            _hotelDbContext.rates.Add(rates);
-            _hotelDbContext.SaveChanges();
-            return rates;
+            return await CreateAsync(rates, cencellationToken);
         }
 
-        public void DeleteRates(Rates rates)
+        public async Task<bool> DeleteRatesAsync(Rates rates, CancellationToken cencellationToken = default)
         {
-            _hotelDbContext.rates.Remove(rates);
-            _hotelDbContext.SaveChanges();
+            return await this.DeleteAsync(rates);
         }
 
-        public Rates EditRates(Rates rates)
+        public IEnumerable<Rates> GetRates()
         {
-            var existingRates = _hotelDbContext.rates.Find(rates.RateID);
-            if (existingRates != null)
-            {
-                _hotelDbContext.rates.Update(rates);
-                _hotelDbContext.SaveChanges();
-            }
-            return rates;
-        }
-
-        public List<Rates> GetRates()
-        {
-            return _hotelDbContext.rates.ToList();
+            return this.GetAll();
         }
 
         public Rates GetRates(Guid RateID)
         {
-            var rates = _hotelDbContext.rates.Find(RateID);
-            return rates;
+            return this.GetById(RateID);
+        }
+
+        public async Task<Rates> UpdateRatesAsync(Rates rates, CancellationToken cencellationToken = default)
+        {
+            var existingRate = _hotelDbContext.rates.FirstOrDefault(x => x.RateID == rates.RateID);
+            if (existingRate != null)
+            {
+                _hotelDbContext.rates.Update(existingRate);
+                await _hotelDbContext.SaveChangesAsync(cencellationToken);
+            }
+            return existingRate;
         }
     }
 }

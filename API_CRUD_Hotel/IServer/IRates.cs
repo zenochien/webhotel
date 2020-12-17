@@ -1,17 +1,18 @@
-﻿using DesignDatabaseHotel.Model;
+﻿using API_CRUD_Hotel.Repositories;
+using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IRates
+    public interface IRates : IRepository<Rates>
     {
-        List<Rates> GetRates();
+        IEnumerable<Rates> GetRates();
         Rates GetRates(Guid RateID);
-        Rates AddRates(Rates rates);
-        void DeleteRates(Rates rates);
-        Rates EditRates(Rates rates);
+        Task<Rates> AddRatesAsync(Rates rates, CancellationToken cencellationToken = default);
+        Task<bool> DeleteRatesAsync(Rates rates, CancellationToken cencellationToken = default);
+        Task<Rates> UpdateRatesAsync(Rates rates, CancellationToken cencellationToken = default);
     }
 }

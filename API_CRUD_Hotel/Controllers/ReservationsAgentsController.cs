@@ -31,10 +31,30 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult GetReservationAgents(ReservationAgents reservationAgents)
+        public async Task<IActionResult> GetReservationAgents(ReservationAgents reservationAgents)
         {
-            _reservationAgents.AddReservationAgents(reservationAgents);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + reservationAgents.ReservationAgentID, reservationAgents);
+           var result = await _reservationAgents.AddReservationAgentsAsync(reservationAgents);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.ReservationAgentID, result);
+        }
+
+        [HttpDelete]
+        [Route("api/[controller]/{guestid}")]
+        public async Task<IActionResult> DeleteReservationAgents(Guid aeservationagentsid)
+        {
+            var reservationAgents = _reservationAgents.GetReservationAgents(aeservationagentsid);
+            if (aeservationagentsid != null)
+            {
+                return Ok(await _reservationAgents.DeleteReservationAgentsAsync(reservationAgents));
+            }
+            return NotFound($"Guests with id: {aeservationagentsid} was not found");
+        }
+
+        [HttpPatch]
+        [Route("api/[controller]/{guestid}")]
+        public async Task<IActionResult> EditReservationAgents(Guid aeservationagentsid, ReservationAgents reservationAgents)
+        {
+            reservationAgents.ReservationAgentID = aeservationagentsid;
+            return Ok(await _reservationAgents.UpdateReservationAgentsAsync(reservationAgents));
         }
     }
 }

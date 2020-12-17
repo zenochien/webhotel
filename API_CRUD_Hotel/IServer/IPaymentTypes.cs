@@ -1,17 +1,18 @@
-﻿using DesignDatabaseHotel.Model;
+﻿using API_CRUD_Hotel.Repositories;
+using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IPaymentTypes
+    public interface IPaymentTypes : IRepository<PaymentTypes>
     {
-        List<PaymentTypes> GetPaymentTypes();
+        IEnumerable<PaymentTypes> GetPaymentTypes();
         PaymentTypes GetPaymentTypes(Guid PaymentTypeID);
-        PaymentTypes AddPaymentTypes(PaymentTypes PaymentTypes);
-        void DeletePaymentTypes(PaymentTypes PaymentTypes);
-        PaymentTypes EditPaymentTypes(PaymentTypes PaymentTypes);
+        Task<PaymentTypes> AddPaymentTypesAsync(PaymentTypes PaymentTypes, CancellationToken cencellationToken = default);
+        Task<bool> DeletePaymentTypesAsync(PaymentTypes PaymentTypes, CancellationToken cencellationToken = default);
+        Task<PaymentTypes> UpdatePaymentTypesAsync(PaymentTypes PaymentTypes, CancellationToken cencellationToken = default);
     }
 }

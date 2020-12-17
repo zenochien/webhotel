@@ -1,17 +1,19 @@
-﻿using DesignDatabaseHotel.Model;
+﻿using API_CRUD_Hotel.Repositories;
+using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IHotels
+    public interface IHotels:IRepository<Hotels>
     {
-        List<Hotels> GetHotels();
+        IEnumerator<Hotels> GetHotels();
         Hotels GetHotels(Guid HotelID);
-        Hotels AddHotels(Hotels hotels);
-        void DeleteHotels(Hotels hotels);
-        Hotels EditHotels(Hotels hotels);
+        Task<Hotels> AddHotels(Hotels hotels, CancellationToken cencellationToken = default);
+        Task<bool> DeleteHotelsAsync(Hotels hotels, CancellationToken cencellationToken = default);
+        Task<Hotels> UpdateHotelsAsync(Hotels hotels, CancellationToken cencellationToken = default);
     }
 }

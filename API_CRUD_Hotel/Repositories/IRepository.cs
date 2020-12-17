@@ -14,6 +14,6 @@ namespace API_CRUD_Hotel.Repositories
 
         Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default);
 
-        Task<bool> DeleteAsync(object id);
+        Task<bool> DeleteAsync(object id, CancellationToken cancellationToken = default);
     }
 }

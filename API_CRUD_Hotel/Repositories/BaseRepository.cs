@@ -1,6 +1,7 @@
 ﻿using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,24 +23,30 @@ namespace API_CRUD_Hotel.Repositories
             return entity;
         }
 
-        public Task<bool> DeleteAsync(object id)
+        public virtual async Task<bool> DeleteAsync(object id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var entity = _context.Set<T>().Find(id);
+            if (entity != null)
+            {
+                _context.Set<T>().Remove(entity);
+            }
+            return await _context.SaveChangesAsync(default) > 0;
         }
 
         public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().AsEnumerable();
         }
 
         public T GetById(object id)
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().Find(id);
         }
 
-        public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().Update(entity);
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }

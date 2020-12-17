@@ -1,17 +1,18 @@
-﻿using DesignDatabaseHotel.Model;
+﻿using API_CRUD_Hotel.Repositories;
+using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IPayments
+    public interface IPayments : IRepository<Payments>
     {
-        List<Payments> GetPayments();
+        IEnumerator<Payments> GetPayments();
         Payments GetPayments(Guid PaymentID);
-        Payments AddPayments(Payments payments);
-        void DeletePayments(Payments payments);
-        Payments EditPayments(Payments payments);
+        Task<Payments> AddPayments(Payments payments, CancellationToken cencellationToken = default);
+        Task<bool> DeletePayments(Payments payments, CancellationToken cencellationToken = default);
+        Task<Payments> UpdatePaymentsAsync(Payments payments, CancellationToken cencellationToken = default);
     }
 }

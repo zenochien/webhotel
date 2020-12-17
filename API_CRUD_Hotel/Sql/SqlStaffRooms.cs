@@ -1,53 +1,57 @@
 ﻿using API_CRUD_Hotel.IServer;
+using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlStaffRooms : IStaffRooms
+    internal class SqlStaffRooms : BaseRepository<StaffRooms> ,IStaffRooms
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlStaffRooms(HotelsDbContext hotelsDbContext)
+        public SqlStaffRooms(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public StaffRooms AddStaffRooms(StaffRooms StaffRooms)
+        public async Task<StaffRooms> AddStaffRoomsAsync(StaffRooms StaffRooms, CancellationToken cancellationToken = default)
         {
-            StaffRooms.StaffRoomID = Guid.NewGuid();
-            _hotelDbContext.staffRooms.Add(StaffRooms);
-            _hotelDbContext.SaveChanges();
-            return StaffRooms;
+            return await CreateAsync(StaffRooms, cancellationToken);
         }
 
-        public void DeleteStaffRooms(StaffRooms StaffRooms)
+        public async Task<bool> DeleteStaffRoomsAsync(StaffRooms StaffRooms, CancellationToken cancellationToken = default)
         {
-            _hotelDbContext.staffRooms.Remove(StaffRooms);
-            _hotelDbContext.SaveChanges();
+            return await this.DeleteAsync(StaffRooms);
         }
 
-        public StaffRooms EditStaffRooms(StaffRooms StaffRooms)
+        public IEnumerable<StaffRooms> GetStaffRooms()
         {
-            var existingStaffRooms = _hotelDbContext.staffRooms.Find(StaffRooms.StaffRoomID);
-            if (existingStaffRooms != null)
-            {
-                _hotelDbContext.staffRooms.Update(StaffRooms);
-                _hotelDbContext.SaveChanges();
-            }
-            return StaffRooms;
-        }
-
-        public List<StaffRooms> GetStaffRooms()
-        {
-            return _hotelDbContext.staffRooms.ToList();
+            return this.GetAll();
         }
 
         public StaffRooms GetStaffRooms(Guid StaffRoomID)
         {
-            var staffRooms = _hotelDbContext.staffRooms.Find(StaffRoomID);
-            return staffRooms;
+            return base.GetById(StaffRoomID);
+        }
+
+        public async Task<StaffRooms> UpdateStaffRoomsAsync(StaffRooms StaffRooms, CancellationToken cancellationToken = default)
+        {
+            var existingStafRooms = _hotelDbContext.staffRooms.FirstOrDefault(x => x.StaffRoomID == StaffRooms.StaffRoomID);
+            if (existingStafRooms!=null)
+            {
+                ToEntity(existingStafRooms, StaffRooms);
+                _hotelDbContext.staffRooms.Update(existingStafRooms);
+                await _hotelDbContext.SaveChangesAsync(cancellationToken);
+            }
+            return existingStafRooms;
+        }
+
+        private void ToEntity(StaffRooms existingStafRooms, StaffRooms staffRooms)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -53,7 +53,7 @@ namespace API_CRUD_Hotel.Controllers
         public async Task<IActionResult> EditGuests(Guid bookingid, Booking bookings)
         {
             bookings.BookingID = bookingid;
-            return Ok(await _repository.UpdateBookingAsync(bookings)); // lay ham dau
+            return Ok(await _repository.UpdateBookingAsync(bookings));
         }
     }
 }

@@ -10,7 +10,6 @@ namespace DesignDatabaseHotel.Model
     {
         [Key]
         public Guid BookingID { get; set; }
-
         public Guid HotelID { get; set; }
         public Guid GuestID { get; set; }
         public Guid ReservationAgentID { get; set; }

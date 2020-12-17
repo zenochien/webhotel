@@ -1,54 +1,58 @@
 ﻿using API_CRUD_Hotel.IServer;
+using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlRoomStatusData : IRoomStatus
+    public class SqlRoomStatusData : BaseRepository<RoomStatus>, IRoomStatus
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlRoomStatusData(HotelsDbContext hotelsDbContext)
+        public SqlRoomStatusData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public RoomStatus AddRoomStatus(RoomStatus roomStatus)
+        public async Task<RoomStatus> AddRoomStatusAsync(RoomStatus roomStatus, CancellationToken cancellationToken = default)
         {
-            roomStatus.RoomStatusID = Guid.NewGuid();
-            _hotelDbContext.roomStatuses.Add(roomStatus);
-            _hotelDbContext.SaveChanges();
-            return roomStatus;
+            return await CreateAsync(roomStatus, cancellationToken);
         }
 
-        public void DeleteRoomStatus(RoomStatus roomStatus)
+        public async Task<bool> DeleteRoomStatusAsync(RoomStatus roomStatus, CancellationToken cancellationToken = default)
         {
-            _hotelDbContext.roomStatuses.Remove(roomStatus);
-            _hotelDbContext.SaveChanges();
+            return await this.DeleteAsync(roomStatus);
         }
 
-        public RoomStatus EditRoomStatus(RoomStatus roomStatus)
+        public IEnumerable<RoomStatus> GetRoomStatus()
         {
-            var existingRoomStatus = _hotelDbContext.roomStatuses.Find(roomStatus.RoomStatusID);
-            if (existingRoomStatus != null)
-            {
-                _hotelDbContext.roomStatuses.Update(roomStatus);
-                _hotelDbContext.SaveChanges();
-            }
-            return roomStatus;
-        }
-
-        public List<RoomStatus> GetRoomStatus()
-        {
-            return _hotelDbContext.roomStatuses.ToList();
+            return this.GetAll();
         }
 
         public RoomStatus GetRoomStatus(Guid RoomStatusID)
         {
-            var roomStatus = _hotelDbContext.roomStatuses.Find(RoomStatusID);
-            return roomStatus;
+            return base.GetById(RoomStatusID);
+        }
+
+        public async Task<RoomStatus> UpdateRoomStatusAsync(RoomStatus roomStatus, CancellationToken cancellationToken = default)
+        {
+            var existingRoomStatus = _hotelDbContext.roomStatuses.FirstOrDefault(x => x.RoomStatusID == roomStatus.RoomStatusID);
+            if (existingRoomStatus != null)
+            {
+                ToEntity(existingRoomStatus, roomStatus);
+                _hotelDbContext.roomStatuses.Update(existingRoomStatus);
+                await _hotelDbContext.SaveChangesAsync(cancellationToken);
+            }
+            return existingRoomStatus;
+
+        }
+
+        internal void ToEntity(RoomStatus data, RoomStatus model)
+        {
+            data.RoomsStatus = model.RoomsStatus;
         }
     }
 }

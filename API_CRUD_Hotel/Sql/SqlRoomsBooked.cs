@@ -1,53 +1,51 @@
 ﻿using API_CRUD_Hotel.IServer;
+using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlRoomsBooked : IRoomsBooked
+    public class SqlRoomsBooked : BaseRepository<RoomsBooked>, IRoomsBooked
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlRoomsBooked(HotelsDbContext hotelsDbContext)
+        public SqlRoomsBooked(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
-        public RoomsBooked AddRoomsBooked(RoomsBooked roomsBooked)
+
+        public async Task<RoomsBooked> AddRoomsBookedAsync(RoomsBooked roomsBooked, CancellationToken cancellationToken = default)
         {
-            roomsBooked.RoomBookedID = Guid.NewGuid();
-            _hotelDbContext.roomsBookeds.Add(roomsBooked);
-            _hotelDbContext.SaveChanges();
-            return roomsBooked;
+            return await CreateAsync(roomsBooked ,cancellationToken);
         }
 
-        public void DeleteRB(RoomsBooked roomsBooked)
+        public async Task<bool> DeleteRoomBookedsAsync(RoomsBooked roomsBooked, CancellationToken cancellationToken)
         {
-            _hotelDbContext.roomsBookeds.Remove(roomsBooked);
-            _hotelDbContext.SaveChanges();
-        }
-
-        public RoomsBooked EditRB(RoomsBooked roomsBooked)
-        {
-            var existingRoomsBooked = _hotelDbContext.roomsBookeds.Find(roomsBooked.RoomBookedID);
-            if (existingRoomsBooked != null)
-            {
-                _hotelDbContext.roomsBookeds.Update(roomsBooked);
-                _hotelDbContext.SaveChanges();
-            }
-            return roomsBooked;
+            return await this.DeleteAsync(roomsBooked);
         }
 
         public RoomsBooked GetRoomsBooked(Guid RoomsBookedID)
         {
-            var roomsBooked = _hotelDbContext.roomsBookeds.Find(RoomsBookedID);
-            return roomsBooked;
+            return base.GetById(RoomsBookedID);
         }
 
-        public List<RoomsBooked> GetRoomsBookeds()
+        public IEnumerable<RoomsBooked> GetRoomsBookeds()
         {
-            return _hotelDbContext.roomsBookeds.ToList();
+            return this.GetAll();
+        }
+
+        public async Task<RoomsBooked> UpdateRoomBookeds(RoomsBooked roomsBooked, CancellationToken cancellationToken = default)
+        {
+            var existingRoomBooked = _hotelDbContext.roomsBookeds.FirstOrDefault(x => x.RoomBookedID == roomsBooked.RoomBookedID);
+            if (existingRoomBooked != null)
+            {
+                _hotelDbContext.roomsBookeds.Update(existingRoomBooked);
+                await _hotelDbContext.SaveChangesAsync(cancellationToken);
+            }
+            return existingRoomBooked;
         }
     }
 }

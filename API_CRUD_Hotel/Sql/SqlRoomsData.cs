@@ -1,54 +1,57 @@
 ﻿using API_CRUD_Hotel.IServer;
+using API_CRUD_Hotel.Repositories;
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.Sql
 {
-    public class SqlRoomsData : IRooms
+    public class SqlRoomsData : BaseRepository<Rooms>, IRooms
     {
         private HotelsDbContext _hotelDbContext;
-        public SqlRoomsData(HotelsDbContext hotelsDbContext)
+        public SqlRoomsData(HotelsDbContext hotelsDbContext) : base(hotelsDbContext)
         {
             _hotelDbContext = hotelsDbContext;
         }
 
-        public Rooms AddRooms(Rooms Rooms)
+        public async Task<Rooms> AddRoomsAsync(Rooms Rooms, CancellationToken cencellationToken = default)
         {
-            Rooms.RoomsID = Guid.NewGuid();
-            _hotelDbContext.rooms.Add(Rooms);
-            _hotelDbContext.SaveChanges();
-            return Rooms;
+            return await CreateAsync(Rooms, cencellationToken);
         }
 
-        public void DeleteRooms(Rooms Rooms)
+        public async Task<bool> DeleteRoomsAsync(Rooms Rooms, CancellationToken cencellationToken = default)
         {
-            _hotelDbContext.rooms.Remove(Rooms);
-            _hotelDbContext.SaveChanges();
+            return await this.DeleteAsync(Rooms);
         }
 
-        public Rooms EditRooms(Rooms Rooms)
+        public IEnumerable<Rooms> GetRooms()
         {
-            var existingRooms = _hotelDbContext.rooms.Find(Rooms.RoomsID);
-            if (existingRooms != null)
-            {
-                _hotelDbContext.rooms.Update(Rooms);
-                _hotelDbContext.SaveChanges();
-            }
-            return Rooms;
-        }
-
-        public List<Rooms> GetRooms()
-        {
-            return _hotelDbContext.rooms.ToList();
+            return this.GetAll();
         }
 
         public Rooms GetRooms(Guid RoomsID)
         {
-            var rooms = _hotelDbContext.rooms.Find(RoomsID);
-            return rooms;
+            return base.GetById(RoomsID);
+        }
+
+        public async Task<Rooms> UpdateRoomsAsync(Rooms Rooms, CancellationToken cencellationToken = default)
+        {
+            var existingRooms = _hotelDbContext.rooms.FirstOrDefault(x => x.RoomsID == Rooms.RoomsID);
+            if (existingRooms != null)
+            {
+                ToEntity(existingRooms, Rooms);
+                _hotelDbContext.rooms.Update(existingRooms);
+                await _hotelDbContext.SaveChangesAsync(cencellationToken);
+            }
+            return existingRooms;
+        }
+
+        private void ToEntity(Rooms existingRooms, Rooms rooms)
+        {
+            throw new NotImplementedException();
         }
     }
 }
