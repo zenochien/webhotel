@@ -2,15 +2,14 @@
 using DesignDatabaseHotel.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IHotels:IRepository<Hotels>
+    public interface IHotels : IRepository<Hotels>
     {
-        IEnumerable<Hotels> GetHotels();
+        IEnumerable<Hotels> GetAllHotels();
         Hotels GetHotels(Guid HotelID);
         Task<Hotels> AddHotels(Hotels hotels, CancellationToken cencellationToken = default);
         Task<bool> DeleteHotelsAsync(Hotels hotels, CancellationToken cencellationToken = default);

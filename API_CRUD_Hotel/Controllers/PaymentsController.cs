@@ -16,6 +16,12 @@ namespace API_CRUD_Hotel.Controllers
             _payments = payments;
         }
 
+        [HttpGet]
+        [Route("/")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok();
+        }
 
         [HttpGet]
         [Route("api/[controller]/{paymentid}")]

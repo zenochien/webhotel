@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IBookingStatus : Repositories.IRepository<BookingStatus>
+    public interface IBookingStatus : IRepository<BookingStatus>
     {
-        IEnumerable<BookingStatus> GetBookingStatuses();
-        BookingStatus GetBookingStatus(Guid BookingStatusID);
+        IEnumerable<BookingStatus> GetAllBookingStatus();
+        BookingStatus GetBookingStatusWithId(Guid BookingStatusID);
         Task<BookingStatus> AddBookingAsync(BookingStatus bookingStatus, CancellationToken cancellationToken = default);
         Task<bool> DeleteBookingStatusAsync(BookingStatus bookingStatus, CancellationToken cancellationToken = default);
         Task<BookingStatus> UpdateBookingStatusAsync(BookingStatus bookingStatus, CancellationToken cancellationToken = default);

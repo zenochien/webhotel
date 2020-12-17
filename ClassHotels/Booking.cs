@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace DesignDatabaseHotel.Model
 {
-    [Table("Bookings")]
-    public class Booking
+    public class Booking 
     {
         [Key]
         public Guid BookingID { get; set; }

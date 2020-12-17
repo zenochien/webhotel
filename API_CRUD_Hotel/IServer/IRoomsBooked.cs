@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IRoomsBooked : Repositories.IRepository<RoomsBooked>
+    public interface IRoomsBooked : IRepository<RoomsBooked>
     {
         IEnumerable<RoomsBooked> GetRoomsBookeds();
         RoomsBooked GetRoomsBooked(Guid RoomsBookedID);

@@ -7,13 +7,21 @@ using System.Threading.Tasks;
 namespace API_CRUD_Hotel.Controllers
 {
     [ApiController]
+    [Route("Booking")]
     public class BookingController : ControllerBase
     {
-        private readonly IBookingRepository _repository;
+        private readonly IBooking _repository;
 
-        public BookingController(IBookingRepository bookings)
+        public BookingController(IBooking bookings)
         {
             _repository = bookings;
+        }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok("view");
         }
 
         [HttpGet]

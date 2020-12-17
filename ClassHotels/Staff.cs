@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace DesignDatabaseHotel.Model
 {
-    public class Rates
+    public class Staff
     {
-
         [Key]
         public Guid StaffID { get; set; }
         [Required]

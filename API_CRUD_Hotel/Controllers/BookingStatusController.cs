@@ -17,15 +17,21 @@ namespace API_CRUD_Hotel.Controllers
         {
             _bookingStatus = bookingStatus;
         }
+        [HttpGet]
+        [Route("/")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok();
+        }
 
         [HttpGet]
         [Route("api/[controller]/{bookingstatusid}")]
         public IActionResult GetBookingStatus(Guid bookingstatusid)
         {
-            var bookingstatus = _bookingStatus.GetBookingStatus(bookingstatusid);
-            if (bookingstatus != null)
+            var bookingStatus = _bookingStatus.GetBookingStatusWithId(bookingstatusid);
+            if (bookingStatus != null)
             {
-                return Ok(bookingstatus);
+                return Ok(bookingStatus);
             }
             return NotFound($"Booking Status with id: {bookingstatusid} was not found");
         }
@@ -42,7 +48,7 @@ namespace API_CRUD_Hotel.Controllers
         [Route("api/[controller]/{bookingstatusid}")]
         public async Task<IActionResult> DeleteBookingStatus(Guid bookingstatusid)
         {
-            var bookingstatus = _bookingStatus.GetBookingStatus(bookingstatusid);
+            var bookingstatus = _bookingStatus.GetBookingStatusWithId(bookingstatusid);
             if (bookingstatusid != null)
             {
                 return Ok(await _bookingStatus.DeleteBookingStatusAsync(bookingstatus));

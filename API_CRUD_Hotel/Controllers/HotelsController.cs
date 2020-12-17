@@ -19,6 +19,13 @@ namespace API_CRUD_Hotel.Controllers
         }
 
         [HttpGet]
+        [Route("/")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok();
+        }
+
+        [HttpGet]
         [Route("api/[controller]/{hotelid}")]
         public IActionResult GetHotels(Guid HotelID)
         {
@@ -32,10 +39,10 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public IActionResult GetHotels(Hotels hotels)
+        public async Task<IActionResult> GetHotels(Hotels hotels)
         {
-            _hotels.AddHotels(hotels);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + hotels.HotelID, hotels);
+            var result = await _hotels.AddHotels(hotels);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.HotelID, result);
         }
 
         [HttpDelete]

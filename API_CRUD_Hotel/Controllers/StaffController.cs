@@ -15,6 +15,14 @@ namespace API_CRUD_Hotel.Controllers
         {
             _staff = staff;
         }
+
+        [HttpGet]
+        [Route("/")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok();
+        }
+
         [HttpGet]
         [Route("api/[controller]/{staffid}")]
         public IActionResult GetStaff(Guid staffid)
@@ -29,7 +37,7 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetStaff(Rates staff)
+        public async Task<IActionResult> GetStaff(Staff staff)
         {
             var result = await _staff.AddStaffAsync(staff);
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + result.StaffID, result);
@@ -49,7 +57,7 @@ namespace API_CRUD_Hotel.Controllers
 
         [HttpPatch]
         [Route("api/[controller]/{guestid}")]
-        public async Task<IActionResult> EditGuests(Guid staffid, Rates staff)
+        public async Task<IActionResult> EditGuests(Guid staffid, Staff staff)
         {
             staff.StaffID = staffid;
             return Ok(await _staff.UpdateStaffAsync(staff));

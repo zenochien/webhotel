@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace DesignDatabaseHotel.Model
 {
-    public class HotelsDbContext : DbContext
+    public class HotelsDbContext : IdentityDbContext
     {
         public HotelsDbContext(DbContextOptions<HotelsDbContext> options) : base(options)
         {
@@ -24,7 +25,7 @@ namespace DesignDatabaseHotel.Model
         public DbSet<RoomsBooked> roomsBookeds { get; set; }
         public DbSet<RoomStatus> roomStatuses { get; set; }
         public DbSet<RoomTypes> roomTypes { get; set; }
-        public DbSet<Rates> staffs { get; set; }
+        public DbSet<Staff> staffs { get; set; }
         public DbSet<StaffRooms> staffRooms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -388,9 +389,9 @@ namespace DesignDatabaseHotel.Model
             });
             });
 
-            builder.Entity<Rates>(e =>
+            builder.Entity<Staff>(e =>
             {
-                e.HasData(new Rates()
+                e.HasData(new Staff()
                 {
                     StaffID = Guid.NewGuid(),
                     FirstName = "Anh",
@@ -406,7 +407,7 @@ namespace DesignDatabaseHotel.Model
                     eMailAddress = "nguyenvananh@mail.com",
                     Gender = "Vietnam"
                 },
-            new Rates()
+            new Staff()
             {
                 StaffID = Guid.NewGuid(),
                 FirstName = "Anh",

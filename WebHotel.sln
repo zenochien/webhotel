@@ -5,7 +5,19 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassHotels", "ClassHotels\ClassHotels.csproj", "{2BDB40F0-2B9F-4443-A187-9F31A8D3EA02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_CRUD_Hotel", "API_CRUD_Hotel\API_CRUD_Hotel.csproj", "{E97F55B6-9C36-4911-966B-2B8C4B970305}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API_CRUD_Hotel", "API_CRUD_Hotel\API_CRUD_Hotel.csproj", "{E97F55B6-9C36-4911-966B-2B8C4B970305}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4Hotel", "IdentityServer4Hotel\IdentityServer4Hotel.csproj", "{313E4EB9-C44E-474A-B16B-901B3BC94FF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{662D1E00-C557-44AA-805C-299C03309429}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerData", "IdentityServerData\IdentityServerData.csproj", "{9CAF569B-BC70-430F-9228-A8FF0E3C36DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LabraryHotel", "LabraryHotel", "{5597B9A8-AB04-4C58-9C19-F2872497D2CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Share", "Share", "{E4D07B6B-0060-4D44-9F4F-6B3972BBBC69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerShare", "IdentityServerShare\IdentityServerShare.csproj", "{398EDACC-6B6D-49E6-92B8-733009F251AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +33,26 @@ Global
 		{E97F55B6-9C36-4911-966B-2B8C4B970305}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E97F55B6-9C36-4911-966B-2B8C4B970305}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E97F55B6-9C36-4911-966B-2B8C4B970305}.Release|Any CPU.Build.0 = Release|Any CPU
+		{313E4EB9-C44E-474A-B16B-901B3BC94FF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{313E4EB9-C44E-474A-B16B-901B3BC94FF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{313E4EB9-C44E-474A-B16B-901B3BC94FF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{313E4EB9-C44E-474A-B16B-901B3BC94FF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CAF569B-BC70-430F-9228-A8FF0E3C36DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CAF569B-BC70-430F-9228-A8FF0E3C36DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CAF569B-BC70-430F-9228-A8FF0E3C36DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CAF569B-BC70-430F-9228-A8FF0E3C36DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{398EDACC-6B6D-49E6-92B8-733009F251AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{398EDACC-6B6D-49E6-92B8-733009F251AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{398EDACC-6B6D-49E6-92B8-733009F251AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{398EDACC-6B6D-49E6-92B8-733009F251AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2BDB40F0-2B9F-4443-A187-9F31A8D3EA02} = {5597B9A8-AB04-4C58-9C19-F2872497D2CA}
+		{9CAF569B-BC70-430F-9228-A8FF0E3C36DF} = {662D1E00-C557-44AA-805C-299C03309429}
+		{398EDACC-6B6D-49E6-92B8-733009F251AB} = {E4D07B6B-0060-4D44-9F4F-6B3972BBBC69}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE8DB6B1-AD52-4FF7-A3C3-422D75D7DD59}

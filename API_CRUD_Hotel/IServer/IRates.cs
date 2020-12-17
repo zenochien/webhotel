@@ -9,7 +9,7 @@ namespace API_CRUD_Hotel.IServer
 {
     public interface IRates : IRepository<Rates>
     {
-        IEnumerable<Rates> GetRates();
+        IEnumerable<Rates> GetAllRates();
         Rates GetRates(Guid RateID);
         Task<Rates> AddRatesAsync(Rates rates, CancellationToken cencellationToken = default);
         Task<bool> DeleteRatesAsync(Rates rates, CancellationToken cencellationToken = default);
