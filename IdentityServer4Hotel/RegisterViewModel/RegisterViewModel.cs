@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityServer4Hotel.RegisterViewModel
+namespace IdentityServer4Hotel.Models
 {
     public class RegisterViewModel
     {

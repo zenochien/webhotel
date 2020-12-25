@@ -22,7 +22,7 @@ namespace IdentityServer4Hotel.DbContext
                 .HasForeignKey(x => x.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-                users.ToTable("users").Property(p => p.Id).HasColumnName("UserId");
+                users.ToTable("Users").Property(p => p.Id).HasColumnName("UserId");
             });
 
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");

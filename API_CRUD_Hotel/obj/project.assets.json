@@ -9372,11 +9372,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\asus\\Desktop\\webhotel\\API_CRUD_Hotel\\API_CRUD_Hotel.csproj",
+      "projectUniqueName": "C:\\Users\\asus\\Desktop\\webhotel (2)\\webhotel\\API_CRUD_Hotel\\API_CRUD_Hotel.csproj",
       "projectName": "API_CRUD_Hotel",
-      "projectPath": "C:\\Users\\asus\\Desktop\\webhotel\\API_CRUD_Hotel\\API_CRUD_Hotel.csproj",
+      "projectPath": "C:\\Users\\asus\\Desktop\\webhotel (2)\\webhotel\\API_CRUD_Hotel\\API_CRUD_Hotel.csproj",
       "packagesPath": "C:\\Users\\asus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\asus\\Desktop\\webhotel\\API_CRUD_Hotel\\obj\\",
+      "outputPath": "C:\\Users\\asus\\Desktop\\webhotel (2)\\webhotel\\API_CRUD_Hotel\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -9398,8 +9398,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\asus\\Desktop\\webhotel\\ClassHotels\\ClassHotels.csproj": {
-              "projectPath": "C:\\Users\\asus\\Desktop\\webhotel\\ClassHotels\\ClassHotels.csproj"
+            "C:\\Users\\asus\\Desktop\\webhotel (2)\\webhotel\\ClassHotels\\ClassHotels.csproj": {
+              "projectPath": "C:\\Users\\asus\\Desktop\\webhotel (2)\\webhotel\\ClassHotels\\ClassHotels.csproj"
             }
           }
         }

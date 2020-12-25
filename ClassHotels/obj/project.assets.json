@@ -1942,11 +1942,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\asus\\Desktop\\webhotel\\ClassHotels\\ClassHotels.csproj",
+      "projectUniqueName": "C:\\Users\\asus\\Desktop\\webhotel (2)\\webhotel\\ClassHotels\\ClassHotels.csproj",
       "projectName": "ClassHotels",
-      "projectPath": "C:\\Users\\asus\\Desktop\\webhotel\\ClassHotels\\ClassHotels.csproj",
+      "projectPath": "C:\\Users\\asus\\Desktop\\webhotel (2)\\webhotel\\ClassHotels\\ClassHotels.csproj",
       "packagesPath": "C:\\Users\\asus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\asus\\Desktop\\webhotel\\ClassHotels\\obj\\",
+      "outputPath": "C:\\Users\\asus\\Desktop\\webhotel (2)\\webhotel\\ClassHotels\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

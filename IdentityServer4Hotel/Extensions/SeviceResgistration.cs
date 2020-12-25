@@ -1,6 +1,8 @@
-﻿using IdentityServer4Hotel.Configuration;
+﻿using AutoMapper;
+using IdentityServer4Hotel.Configuration;
 using IdentityServer4Hotel.DbContext;
 using IdentityServer4Hotel.Models;
+using IdentityServer4Hotel.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,7 +46,19 @@ namespace IdentityServer4Hotel.Extensions
                 .AddInMemoryClients(Config.GetClients())
                 .AddAspNetIdentity<User>();
 
+            services.AddMapper();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAuthencationService, AuthencationService>();
             return services;
+        }
+
+        private static void AddMapper(this IServiceCollection services)
+        {
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AllowNullCollections = true;
+                cfg.AllowNullDestinationValues = true;
+            }, typeof(SeviceResgistration));
         }
     }
 }
