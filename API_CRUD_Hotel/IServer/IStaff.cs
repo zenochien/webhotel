@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IStaff : Repositories.IRepository<Rates>
+    public interface IStaff : IRepository<Staff>
     {
-        IEnumerable<Rates> GetStaffs();
-        Rates GetStaffs(Guid StaffID);
-        Task<Rates> AddStaffAsync(Rates staff, CancellationToken cancellationToken = default);
-        Task<bool> DeleteStaffAsync(Rates staff, CancellationToken cancellationToken = default);
-        Task<Rates> UpdateStaffAsync(Rates staff, CancellationToken cancellationToken = default);
+        IEnumerable<Staff> GetAllStaffs();
+        Staff GetStaffs(Guid StaffID);
+        Task<Staff> AddStaffAsync(Staff staff, CancellationToken cancellationToken = default);
+        Task<bool> DeleteStaffAsync(Staff staff, CancellationToken cancellationToken = default);
+        Task<Staff> UpdateStaffAsync(Staff staff, CancellationToken cancellationToken = default);
     }
 }

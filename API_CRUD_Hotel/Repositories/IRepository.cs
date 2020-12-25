@@ -6,6 +6,7 @@ namespace API_CRUD_Hotel.Repositories
 {
     public interface IRepository<T>
     {
+        
         T GetById(object id);
 
         IEnumerable<T> GetAll();

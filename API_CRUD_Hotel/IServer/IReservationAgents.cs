@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IReservationAgents : Repositories.IRepository<ReservationAgents>
+    public interface IReservationAgents : IRepository<ReservationAgents>
     {
-        IEnumerable<ReservationAgents> GetReservationAgents();
+        IEnumerable<ReservationAgents> GetAllReservationAgents();
         ReservationAgents GetReservationAgents(Guid ReservationAgentID);
         Task<ReservationAgents> AddReservationAgentsAsync(ReservationAgents reservationAgents, CancellationToken cencellationToken = default);
         Task<bool> DeleteReservationAgentsAsync(ReservationAgents reservationAgents, CancellationToken cencellationToken = default);

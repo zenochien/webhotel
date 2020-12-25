@@ -17,6 +17,13 @@ namespace API_CRUD_Hotel.Controllers
         }
 
         [HttpGet]
+        [Route("/")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok();
+        }
+
+        [HttpGet]
         [Route("api/[controller]/{rateid}")]
         public IActionResult GetRates(Guid rateid)
         {

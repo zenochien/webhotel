@@ -20,10 +20,10 @@ namespace API_CRUD_Hotel.Controllers
         [Route("api/[controller]/{guestid}")]
         public IActionResult GetGuests(Guid guestid)
         {
-            var guests = _guests.GetGuests(guestid);
-            if (guests != null)
+            var guest = _guests.GetGuests(guestid);
+            if (guest != null)
             {
-                return Ok(guests);
+                return Ok(guest);
             }
             return NotFound($"Guests with id: {guestid} was not found");
         }

@@ -10,7 +10,7 @@ namespace API_CRUD_Hotel.IServer
 {
     public interface IPositions : IRepository<Positions>
     {
-        IEnumerable<Positions> GetPositions();
+        IEnumerable<Positions> GetAllPositions();
         Positions GetPositions(Guid PositionID);
         Task<Positions> AddPositionsAsync(Positions positions, CancellationToken cencellationToken = default);
         Task<bool> DeletePositionsAsync(Positions positions, CancellationToken cencellationToken = default);

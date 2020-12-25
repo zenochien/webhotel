@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IRateTypes: Repositories.IRepository<RateTypes>
+    public interface IRateTypes: IRepository<RateTypes>
     {
-        IEnumerable<RateTypes> GetRateTypes();
+        IEnumerable<RateTypes> GetAllRateTypes();
         RateTypes GetRateTypes(Guid RateTypesID);
         Task<RateTypes> AddRateTypesAsync(RateTypes RateTypes, CancellationToken cencellationToken = default);
         Task<bool> DeleteRateTypesAsync(RateTypes RateTypes, CancellationToken cencellationToken = default);

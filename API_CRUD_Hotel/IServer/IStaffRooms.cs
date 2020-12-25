@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-   public interface IStaffRooms: Repositories.IRepository<StaffRooms>
+   public interface IStaffRooms: IRepository<StaffRooms>
     {
-        IEnumerable<StaffRooms> GetStaffRooms();
+        IEnumerable<StaffRooms> GetAllStaffRooms();
         StaffRooms GetStaffRooms(Guid StaffRoomID);
         Task<StaffRooms> AddStaffRoomsAsync(StaffRooms StaffRooms, CancellationToken cancellationToken=default);
         Task<bool> DeleteStaffRoomsAsync(StaffRooms StaffRooms, CancellationToken cancellationToken = default);

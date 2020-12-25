@@ -23,26 +23,26 @@ namespace API_CRUD_Hotel
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<IBookingStatus, SqlBSData>();
-            services.AddScoped<IHotels, SqlHotelData>();
-            services.AddScoped<IPayments, SqlPaymentData>();
-            services.AddScoped<IPaymentStatus, SqlPaymentStatusData>();
-            services.AddScoped<IPaymentTypes, SqlPaymentTypesData>();
-            services.AddScoped<IPositions, SqlPositionsData>();
-            services.AddScoped<IRates, SqlRatesData>();
-            services.AddScoped<IRateTypes, SqlRateTypesData>();
-            services.AddScoped<IRoomsBooked, SqlRoomsBooked>();
-            services.AddScoped<IRooms, SqlRoomsData>();
-            services.AddScoped<IRoomStatus, SqlRoomStatusData>();
-            services.AddScoped<IRoomTypes, SqlRoomTypesData>();
-            services.AddScoped<IStaff, SqlStaffData>();
-            services.AddScoped<IStaffRooms, SqlStaffRooms>();
-            services.AddScoped<IPositions, SqlPositionsData>();
-            services.AddScoped<IGuests, SqlGuestData>();
-            services.AddScoped<IBookingRepository, SqlBookingsRepository>();
-            services.AddScoped<IReservationAgents, SqlRAData>();
+            services.AddScoped<IBookingStatus, BookingStatusRespository>();
+            services.AddScoped<IHotels, HotelRepository>();
+            services.AddScoped<IPayments, PaymentRespository>();
+            services.AddScoped<IPaymentStatus, PaymentStatusRepostory>();
+            services.AddScoped<IPaymentType, PaymentTypesRespository>();
+            services.AddScoped<IPositions, PositionsRespository>();
+            services.AddScoped<IRates, RatesRespository>();
+            services.AddScoped<IRateTypes, RateTypesRespository>();
+            services.AddScoped<IRoomsBooked, RoomsBookedRespository>();
+            services.AddScoped<IRooms, RoomsRespository>();
+            services.AddScoped<IRoomStatus, RoomStatusRespository>();
+            services.AddScoped<IRoomTypes, RoomTypesRespository>();
+            services.AddScoped<IStaff, StaffRespository>();
+            services.AddScoped<IStaffRooms, StaffRoomsRespository>();
+            services.AddScoped<IPositions, PositionsRespository>();
+            services.AddScoped<IGuests, GuestRespository>();
+            services.AddScoped<IBooking, BookingRespository>();
+            services.AddScoped<IReservationAgents, ReservationAgentsRespository>();
 
-            services.AddDbContextPool<HotelsDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ketnoisql")));
+            services.AddDbContextPool<HotelsDbContext>(options => options.UseSqlServer("Data Source=DESKTOP-79CPV12;Initial Catalog=DesignData_Hotel;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -17,6 +17,14 @@ namespace API_CRUD_Hotel.Controllers
         {
             _reservationAgents = reservationAgents;
         }
+
+        [HttpGet]
+        [Route("/")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok();
+        }
+
         [HttpGet]
         [Route("api/[controller]/{reservationAgentid}")]
         public IActionResult GetReservationAgents(Guid reservationAgentid)

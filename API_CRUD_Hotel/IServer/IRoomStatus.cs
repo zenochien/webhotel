@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace API_CRUD_Hotel.IServer
 {
-    public interface IRoomStatus : Repositories.IRepository<RoomStatus>
+    public interface IRoomStatus : IRepository<RoomStatus>
     {
-        IEnumerable<RoomStatus> GetRoomStatus();
+        IEnumerable<RoomStatus> GetAllRoomStatus();
         RoomStatus GetRoomStatus(Guid RoomStatusID);
         Task<RoomStatus> AddRoomStatusAsync(RoomStatus roomStatus, CancellationToken cancellationToken = default);
         Task<bool> DeleteRoomStatusAsync(RoomStatus roomStatus, CancellationToken cancellationToken = default);
